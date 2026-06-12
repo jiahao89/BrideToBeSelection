@@ -21,10 +21,14 @@
         <text class="user-nickname text-bold text-xl">{{profile.nickname || '校友用户'}}</text>
         <text class="role-tag ml-8">{{profile.role === 'single' ? '单身校友' : '校友介绍人'}}</text>
       </view>
-      <view class="school-row text-sm text-secondary mb-8" wx:if="{{profile.school}}">
-        {{profile.school}} · {{profile.degree || '硕士'}}
+      <view class="school-row text-sm text-secondary flex items-center mb-8" wx:if="{{profile.school}}">
+        <text>{{profile.school}} · {{profile.degree || '硕士'}}</text>
+        <view class="verified-status-inline flex items-center text-success text-xs text-bold ml-12" wx:if="{{profile.eduVerified}}">
+          <view class="icon icon-badge-check mr-4" style="width: 24rpx; height: 24rpx; color: #10B981;"></view>
+          <text>已认证</text>
+        </view>
       </view>
-      <view class="verified-status-row flex items-center text-success text-xs text-bold" wx:if="{{profile.eduVerified}}">
+      <view class="verified-status-row flex items-center text-success text-xs text-bold mb-8" wx:elif="{{profile.eduVerified}}">
         <view class="icon icon-badge-check mr-4" style="width: 24rpx; height: 24rpx; color: #10B981;"></view>
         <text>已认证</text>
       </view>
@@ -52,10 +56,10 @@
   <!-- 操作菜单列表 (Menu Actions) -->
   <view class="menu-card card mb-24">
     <!-- 我的心动设置 -->
-    <view class="menu-item flex flex-between items-center py-16" bindtap="onSettingsHeart">
+    <view class="menu-item flex flex-between items-center" bindtap="onSettingsHeart">
       <view class="menu-title flex items-center">
         <view class="menu-icon-bg bg-orange flex flex-center mr-12">
-          <view class="icon icon-settings text-white" style="width: 36rpx; height: 36rpx; color: #FF7A59;"></view>
+          <view class="icon icon-settings text-white" style="width: 40rpx; height: 40rpx; color: #FF7A59;"></view>
         </view>
         <text class="menu-text">我的心动设置</text>
       </view>
@@ -64,10 +68,10 @@
     <view class="item-divider"></view>
  
     <!-- 收到的破冰回答 -->
-    <view class="menu-item flex flex-between items-center py-16" bindtap="onReceivedAnswers">
+    <view class="menu-item flex flex-between items-center" bindtap="onReceivedAnswers">
       <view class="menu-title flex items-center">
         <view class="menu-icon-bg bg-blue flex flex-center mr-12">
-          <view class="icon icon-chat text-white" style="width: 36rpx; height: 36rpx; color: #3B82F6;"></view>
+          <view class="icon icon-chat text-white" style="width: 40rpx; height: 40rpx; color: #3B82F6;"></view>
         </view>
         <text class="menu-text">收到的破冰回答</text>
       </view>
@@ -79,10 +83,10 @@
     <view class="item-divider"></view>
  
     <!-- 资质认证中心 -->
-    <view class="menu-item flex flex-between items-center py-16" bindtap="onGoToVerification">
+    <view class="menu-item flex flex-between items-center" bindtap="onGoToVerification">
       <view class="menu-title flex items-center">
         <view class="menu-icon-bg bg-green flex flex-center mr-12">
-          <view class="icon icon-shield text-white" style="width: 36rpx; height: 36rpx; color: #10B981;"></view>
+          <view class="icon icon-shield text-white" style="width: 40rpx; height: 40rpx; color: #10B981;"></view>
         </view>
         <text class="menu-text">资质认证中心</text>
       </view>
@@ -95,10 +99,10 @@
     <view class="item-divider"></view>
  
     <!-- 我发起的心动 -->
-    <view class="menu-item flex flex-between items-center py-16" bindtap="onMyCrushList">
+    <view class="menu-item flex flex-between items-center" bindtap="onMyCrushList">
       <view class="menu-title flex items-center">
         <view class="menu-icon-bg bg-red flex flex-center mr-12">
-          <view class="icon icon-heart text-white" style="width: 36rpx; height: 36rpx; color: #EF4444;"></view>
+          <view class="icon icon-heart text-white" style="width: 40rpx; height: 40rpx; color: #EF4444;"></view>
         </view>
         <text class="menu-text">我发起的心动</text>
       </view>
@@ -107,10 +111,10 @@
     <view class="item-divider"></view>
  
     <!-- 我的破冰问题 -->
-    <view class="menu-item flex flex-between items-center py-16" bindtap="onMyIcebreakers">
+    <view class="menu-item flex flex-between items-center" bindtap="onMyIcebreakers">
       <view class="menu-title flex items-center">
         <view class="menu-icon-bg bg-purple flex flex-center mr-12">
-          <view class="icon icon-help text-white" style="width: 36rpx; height: 36rpx; color: #8B5CF6;"></view>
+          <view class="icon icon-help text-white" style="width: 40rpx; height: 40rpx; color: #8B5CF6;"></view>
         </view>
         <text class="menu-text">我的破冰问题</text>
       </view>
