@@ -31,16 +31,34 @@ Page({
    * 微信授权登录
    */
   async onGetPhoneNumber(e) {
-    if (!this.data.agreed) {
-      wx.showToast({ title: '请先阅读并同意协议', icon: 'none' })
-      return
-    }
-
     if (e.detail.errMsg !== 'getPhoneNumber:ok') {
       wx.showToast({ title: '需要手机号授权才能登录', icon: 'none' })
       return
     }
 
+    if (!this.data.agreed) {
+      wx.showModal({
+        title: '用户协议与隐私政策',
+        content: '您需要同意《用户服务协议》和《隐私政策》后才能继续登录',
+        confirmText: '同意',
+        cancelText: '取消',
+        success: async (res) => {
+          if (res.confirm) {
+            this.setData({ agreed: true })
+            await this._doWechatLogin()
+          }
+        }
+      })
+      return
+    }
+
+    await this._doWechatLogin()
+  },
+
+  /**
+   * 执行微信登录逻辑
+   */
+  async _doWechatLogin() {
     this.setData({ loading: true })
 
     try {
@@ -83,10 +101,28 @@ Page({
    */
   onPhoneLogin() {
     if (!this.data.agreed) {
-      wx.showToast({ title: '请先阅读并同意协议', icon: 'none' })
+      wx.showModal({
+        title: '用户协议与隐私政策',
+        content: '您需要同意《用户服务协议》和《隐私政策》后才能继续登录',
+        confirmText: '同意',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.setData({ agreed: true })
+            this._doPhoneLogin()
+          }
+        }
+      })
       return
     }
 
+    this._doPhoneLogin()
+  },
+
+  /**
+   * 执行手机号登录逻辑
+   */
+  _doPhoneLogin() {
     const app = getApp()
     // 初始化一个全新的未注册/未认证用户状态，以便进入注册流程
     app.globalData.userId = 'mock_new_user_id'
