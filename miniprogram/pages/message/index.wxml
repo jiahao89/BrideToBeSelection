@@ -1,0 +1,131 @@
+<view class="page-container message-center-page">
+  <!-- Segmented Tab Bar -->
+  <view class="tabs-header-bar flex border-b mb-16">
+    <button 
+      class="tab-btn flex-1 py-12 relative flex flex-center" 
+      bindtap="onTabChange" 
+      data-tab="crush"
+    >
+      <text class="tab-btn-txt text-sm {{activeTab === 'crush' ? 'text-primary text-bold' : 'text-secondary'}}">心动消息</text>
+      <view class="active-tab-line" wx:if="{{activeTab === 'crush'}}"></view>
+    </button>
+    <button 
+      class="tab-btn flex-1 py-12 relative flex flex-center" 
+      bindtap="onTabChange" 
+      data-tab="like"
+    >
+      <text class="tab-btn-txt text-sm {{activeTab === 'like' ? 'text-primary text-bold' : 'text-secondary'}}">点赞消息</text>
+      <view class="active-tab-line" wx:if="{{activeTab === 'like'}}"></view>
+    </button>
+  </view>
+
+  <!-- Message Content Area -->
+  <scroll-view 
+    scroll-y 
+    class="message-scroll-list" 
+    refresher-enabled 
+    refresher-triggered="{{loading}}" 
+    bindrefresherrefresh="fetchData"
+  >
+    <!-- 心动消息 Tab 列表 -->
+    <view class="crush-list-container space-y-16" wx:if="{{activeTab === 'crush'}}">
+      <block wx:for="{{crushList}}" wx:key="_id">
+        <view class="message-card card p-0 overflow-hidden">
+          <!-- 卡片头部点击可折叠/展开 -->
+          <view class="card-header flex flex-between items-center px-16 py-16" bindtap="onToggleExpand" data-id="{{item._id}}">
+            <view class="header-left flex items-center">
+              <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZf5v0G4zeqKBiVIfV_-GFQa-PtD5VjU6yFhl7Yrh3rfHqyGhLJ0lvFOn7-zq3NGNVC9iwfGfObnrnZZmMC4rDI22ohJDb7YU1N-IreGtDa-Ts1hsGLu_k3swEU3uOn9Rau8TZGN0jgLi0TeqZeXYIMausC1pg9Dpp33wlh-8_jRIjXL-vlMrqkJOTxvH3PS44AULt2HIzY2pwizbOG8t5ewCWi6RKi_FtLCGsVWggu785gl5NbLCsXe-O5UmXunQcH4K9ZpxnOgc'}}" mode="aspectFill" />
+              <view class="sender-info">
+                <view class="name-row flex items-center">
+                  <text class="sender-name text-bold text-base">{{item.nickname}}</text>
+                  <text class="new-badge ml-8" wx:if="{{item.status !== 'accepted' && index === 0}}">NEW</text>
+                </view>
+                <text class="sender-school text-xs text-secondary">{{item.school}} · {{item.degree || '本科'}}</text>
+              </view>
+            </view>
+            <view class="header-right flex flex-col items-end">
+              <text class="message-time text-xs text-tertiary mb-4">{{item.time}}</text>
+              <text class="arrow-indicator text-tertiary text-xs">{{item.expanded ? '▼' : '▶'}}</text>
+            </view>
+          </view>
+
+          <!-- 展开详情面板 -->
+          <view class="expanded-panel mx-16 mb-16 p-16" wx:if="{{item.expanded}}">
+            <!-- 互加微信状态 -->
+            <view class="connected-row flex items-center mb-16" wx:if="{{item.status === 'accepted'}}">
+              <view class="icon icon-shield text-success mr-8" style="background-color: #10B981;"></view>
+              <text class="connected-txt text-sm text-secondary text-bold">已互加微信：{{item.wechatId || 'linchen_98'}}</text>
+            </view>
+ 
+            <!-- 问答详情 -->
+            <view class="qna-list mb-16" wx:if="{{item.answers}}">
+              <block wx:for="{{item.answers}}" wx:for-index="qId" wx:for-item="aText" wx:key="qId">
+                <view class="qna-item mb-12">
+                  <view class="qna-q text-bold text-sm mb-4 flex items-center">
+                    <view class="icon icon-heart text-primary mr-8"></view>
+                    <text>你理想中的周末是怎样度过的？</text>
+                  </view>
+                  <view class="qna-a text-sm text-secondary leading-relaxed">{{aText}}</view>
+                </view>
+              </block>
+            </view>
+ 
+            <!-- 操作按钮 -->
+            <view class="action-buttons-row flex gap-12" wx:if="{{item.status !== 'accepted'}}">
+              <button 
+                class="btn btn-outline flex-1 reject-btn" 
+                catchtap="onDecline" 
+                data-id="{{item._id}}"
+              >
+                暂不合适
+              </button>
+              <button 
+                class="btn btn-primary flex-1-5 accept-btn flex flex-center gap-8" 
+                catchtap="onAccept" 
+                data-id="{{item._id}}"
+              >
+                <view class="icon icon-chat mr-8" style="background-color: #FFFFFF;"></view>
+                <text>互加微信</text>
+              </button>
+            </view>
+          </view>
+        </view>
+      </block>
+ 
+      <!-- 空状态 -->
+      <view wx:if="{{crushList.length === 0}}" class="empty-state">
+        <text class="empty-state-text">暂无心动消息，快去推荐页多点赞吧</text>
+      </view>
+    </view>
+ 
+    <!-- 点赞消息 Tab 列表 -->
+    <view class="like-list-container space-y-16" wx:if="{{activeTab === 'like'}}">
+      <block wx:for="{{likeList}}" wx:key="_id">
+        <view class="like-item-card card flex flex-between items-center py-16 px-20">
+          <view class="item-left flex items-center">
+            <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBj1iILsmZ8lMcnuqGX4OeZL8ulIC7dajUDqvUyLcV_R0I9t4GYgrnEQpeKzIH4zdrXCV-28cEHMr1NsbK4Z052J-_s1HqhmT_wwQSnPgZT-3CVxBU3Fnyissl6SgcbuCiJwAEG3dFhEhGln0XuUpLvCsOrDEfaggdu-Ia-y5igmqVp7WqqBC13zVNvHjQyYx0ZU3fLiwNMDcii4erFfuzG8GK9x0xOpwLKTX70GBrIxqiJMT5EBMo9siGmz1N45qeQ2t2ZVuNmu6Y'}}" mode="aspectFill" />
+            <view class="like-info">
+              <view class="name-row flex items-center mb-4">
+                <text class="like-name text-bold text-base">{{item.nickname}}</text>
+                <text class="like-school text-xs text-secondary ml-8">{{item.school}}</text>
+              </view>
+              <view class="like-action-text text-sm text-secondary flex items-center">
+                <view class="icon icon-heart text-primary mr-4"></view>
+                <text>同频点赞了你，可在详情中发起心动</text>
+              </view>
+            </view>
+          </view>
+          <view class="item-right flex flex-col items-end">
+            <text class="like-time text-xs text-tertiary mb-4">{{item.time}}</text>
+            <button class="btn btn-sm btn-ghost" bindtap="onGoToDetail" data-id="{{item._id}}">详情</button>
+          </view>
+        </view>
+      </block>
+
+      <!-- 空状态 -->
+      <view wx:if="{{likeList.length === 0}}" class="empty-state">
+        <text class="empty-state-text">暂无点赞消息</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

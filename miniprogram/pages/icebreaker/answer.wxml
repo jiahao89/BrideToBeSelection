@@ -1,0 +1,51 @@
+<view class="page-container answer-page">
+  <view class="header-box mb-24">
+    <text class="header-subtitle text-secondary text-sm">
+      回答 <text class="text-primary text-bold">{{name || '对方'}}</text> 设定的破冰提问，真诚的回答更易获得好感
+    </text>
+  </view>
+
+  <view class="questions-list">
+    <block wx:for="{{questions}}" wx:key="id">
+      <view class="question-item mb-24">
+        <label class="q-label block mb-8 font-bold text-lg text-primary">
+          {{item.content}}
+        </label>
+        <view class="textarea-container card p-16">
+          <textarea 
+            class="input-textarea text-base" 
+            placeholder="请输入回答，最少20字" 
+            bindinput="onInput" 
+            data-id="{{item.id}}" 
+            value="{{answers[item.id] || ''}}" 
+            maxlength="200" 
+          />
+          <view class="word-counter text-right text-tertiary text-xs mt-8">
+            <text class="{{answers[item.id] && answers[item.id].length > 0 && answers[item.id].length < 20 ? 'text-primary' : ''}}">{{answers[item.id] ? answers[item.id].length : 0}}/200</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- Campus illustration from Stitch -->
+  <view class="illustration-box mt-16 mb-40">
+    <image 
+      class="illustration-img aspect-video" 
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn4Y1zJ9OpHn-qwN6xMGOoe4jwKoa1DQQVntaSqQFgoSkgXKX7pumAUH6ivpG9LwmauPc7JMUEGH3OA_l6FobB-ga_6LMkMh-liw4uybRE7dscqu_F1gvEN2uTPwSVWvyttYODTpV154Ij9XCgl9Oe-9fRFDbp3x-IFIX6WjNL7bYo7NXvepOzs4F9Z91TOCf6IJ7ESfsnSPwmyPT71PqaT9vQrCqi3tlg_OhpYrYaJEbsdegv2v-QsgWFcDlkibOV5VrmVLtfKZc" 
+      mode="aspectFill"
+    />
+  </view>
+
+  <!-- Actions -->
+  <view class="actions-box safe-bottom">
+    <button 
+      class="btn btn-primary btn-gradient btn-block btn-lg" 
+      loading="{{loading}}" 
+      disabled="{{loading}}" 
+      bindtap="onSubmit"
+    >
+      提交并心动
+    </button>
+  </view>
+</view>

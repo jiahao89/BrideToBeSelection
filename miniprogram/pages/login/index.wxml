@@ -1,0 +1,50 @@
+<view class="login-page">
+  <!-- 顶部品牌区域 -->
+  <view class="brand-area">
+    <view class="logo-card">
+      <image class="logo-img" src="/assets/logo.svg" mode="aspectFit"></image>
+    </view>
+    <text class="brand-name">校缘</text>
+    <text class="brand-slogan">高校校友真实严肃相亲平台</text>
+  </view>
+
+  <!-- 登录按钮区域 -->
+  <view class="login-actions">
+    <!-- 微信快捷登录 -->
+    <button
+      class="btn-wechat"
+      open-type="getPhoneNumber"
+      bindgetphonenumber="onGetPhoneNumber"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      <image class="wechat-icon" src="/assets/wechat-icon.svg" mode="aspectFit"></image>
+      <text class="wechat-text">微信一键登录</text>
+    </button>
+
+    <!-- 手机号/验证码登录 -->
+    <button class="btn-phone" bind:tap="onPhoneLogin">
+      <text class="phone-text">手机号登录/注册</text>
+    </button>
+
+    <!-- 跳过登录/游客体验 -->
+    <view class="skip-action" bind:tap="onSkipLogin">
+      <text class="skip-text">暂不登录，游客体验</text>
+    </view>
+  </view>
+
+  <!-- 协议说明区域 -->
+  <view class="agreement-bar">
+    <view class="agreement-checkbox-wrapper" bind:tap="onToggleAgreement">
+      <view class="checkbox-circle {{agreed ? 'checked' : ''}}">
+        <text wx:if="{{agreed}}" class="check-mark">✓</text>
+      </view>
+    </view>
+    <view class="agreement-content">
+      <text>我已阅读并同意 </text>
+      <text class="agreement-link" catch:tap="onViewTerms">《用户服务协议》</text>
+      <text> 和 </text>
+      <text class="agreement-link" catch:tap="onViewPrivacy">《隐私政策》</text>
+    </view>
+  </view>
+</view>

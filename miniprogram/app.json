@@ -1,0 +1,63 @@
+{
+  "cloud": true,
+  "pages": [
+    "pages/login/index",
+    "pages/role-select/index",
+    "pages/verification/index",
+    "pages/recommend/index",
+    "pages/profile-detail/index",
+    "pages/icebreaker/answer",
+    "pages/message/index",
+    "pages/mine/index",
+    "pages/report/index",
+    "pages/event/list",
+    "pages/event/detail"
+  ],
+  "tabBar": {
+    "color": "#8A8A8A",
+    "selectedColor": "#FF7A59",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/recommend/index",
+        "text": "推荐",
+        "iconPath": "assets/icons/tab-recommend.png",
+        "selectedIconPath": "assets/icons/tab-recommend-active.png"
+      },
+      {
+        "pagePath": "pages/event/list",
+        "text": "活动",
+        "iconPath": "assets/icons/tab-event.png",
+        "selectedIconPath": "assets/icons/tab-event-active.png"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "消息",
+        "iconPath": "assets/icons/tab-message.png",
+        "selectedIconPath": "assets/icons/tab-message-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "assets/icons/tab-mine.png",
+        "selectedIconPath": "assets/icons/tab-mine-active.png"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFF9F6",
+    "navigationBarTitleText": "六朝松相亲会",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FFF9F6"
+  },
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于推荐同城对象"
+    }
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2"
+}

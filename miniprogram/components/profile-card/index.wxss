@@ -1,0 +1,188 @@
+/* 资料卡组件样式 */
+.profile-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-20);
+  margin-bottom: var(--spacing-16);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-card:active {
+  transform: scale(0.985);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- 头部：照片 + 基础信息 --- */
+.card-header {
+  display: flex;
+  gap: var(--spacing-16);
+}
+
+.photo-wrapper {
+  position: relative;
+  width: 180rpx;
+  height: 220rpx;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-bg-page);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary-lighter), var(--color-bg-page));
+}
+
+.photo-placeholder-text {
+  font-size: var(--font-size-3xl);
+  opacity: 0.5;
+}
+
+.photo-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8rpx);
+}
+
+.photo-mask-text {
+  color: #fff;
+  font-size: var(--font-size-xs);
+  text-align: center;
+  padding: var(--spacing-8);
+}
+
+/* --- 信息区 --- */
+.info-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-8);
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.nickname {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.age-tag {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  background: var(--color-primary-lighter);
+  padding: 2rpx 12rpx;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+}
+
+.gender-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.quick-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+.info-item {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.info-dot {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-placeholder);
+}
+
+/* --- 认证标签 --- */
+.verify-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+  margin-top: var(--spacing-12);
+}
+
+/* --- 媒人背书 --- */
+.endorsement-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  margin-top: var(--spacing-12);
+  padding: var(--spacing-12);
+  background: var(--color-accent-lighter);
+  border-radius: var(--radius-md);
+}
+
+.endorsement-icon {
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.endorsement-content {
+  flex: 1;
+}
+
+.endorsement-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-2);
+}
+
+.endorsement-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* --- 关系链 --- */
+.relation-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  margin-top: var(--spacing-12);
+  padding: var(--spacing-8) var(--spacing-12);
+  background: var(--color-info-light);
+  border-radius: var(--radius-md);
+}
+
+.relation-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-info);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.relation-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,132 @@
+<view class="page-container event-detail-page">
+  <!-- 顶部 Banner 封面 -->
+  <view class="detail-cover-box">
+    <image 
+      class="detail-cover" 
+      src="{{event.cover || '/assets/images/default-event.png'}}" 
+      mode="aspectFill" 
+    />
+    <view class="status-tag status-{{event.status}}">{{event.statusText}}</view>
+  </view>
+
+  <!-- 活动核心信息 -->
+  <view class="main-info-card card">
+    <view class="event-title text-bold text-xl mb-16">{{event.title}}</view>
+    
+    <view class="info-row flex items-center py-12">
+      <view class="info-icon flex-center">
+        <view class="icon icon-clock text-primary"></view>
+      </view>
+      <view class="info-content ml-12">
+        <view class="info-val text-medium">{{event.dateTimeStr}}</view>
+        <view class="info-desc text-xs text-tertiary">活动时间</view>
+      </view>
+    </view>
+ 
+    <view class="info-row flex items-center py-12" bindtap="onOpenMap">
+      <view class="info-icon flex-center">
+        <view class="icon icon-mappin text-primary"></view>
+      </view>
+      <view class="info-content ml-12 flex-1">
+        <view class="info-val text-medium text-ellipsis">{{event.location}}</view>
+        <view class="info-desc text-xs text-tertiary">点击查看地图</view>
+      </view>
+      <text class="arrow-right text-tertiary">❯</text>
+    </view>
+ 
+    <view class="info-row flex items-center py-12">
+      <view class="info-icon flex-center">
+        <view class="icon icon-users text-primary"></view>
+      </view>
+      <view class="info-content ml-12">
+        <view class="info-val text-medium">限 {{event.limitCount || 50}} 人参加 （已报名 {{event.attendingCount || 0}} 人）</view>
+        <view class="info-desc text-xs text-tertiary">人数限制</view>
+      </view>
+    </view>
+ 
+    <view class="info-row flex items-center py-12">
+      <view class="info-icon flex-center">
+        <view class="icon icon-card text-primary"></view>
+      </view>
+      <view class="info-content ml-12">
+        <view class="info-val text-medium text-primary">{{event.fee || '免费 / AA制'}}</view>
+        <view class="info-desc text-xs text-tertiary">活动费用</view>
+      </view>
+    </view>
+  </view>
+ 
+  <!-- 报名要求 -->
+  <view class="card requirement-card">
+    <view class="section-title text-medium mb-12">报名要求</view>
+    <view class="req-item flex items-center mb-8">
+      <icon class="req-check" type="success" size="14" color="#FF7A59" />
+      <text class="req-text text-sm ml-8">必须通过【学历认证】或【工作认证】</text>
+    </view>
+    <view class="req-item flex items-center">
+      <icon class="req-check" type="success" size="14" color="#FF7A59" />
+      <text class="req-text text-sm ml-8">专科/本科/硕士/博士学历，且为单身状态</text>
+    </view>
+  </view>
+ 
+  <!-- 活动详情介绍 -->
+  <view class="card description-card mb-24">
+    <view class="section-title text-medium mb-16">活动介绍</view>
+    <view class="rich-text text-secondary text-sm">
+      <block wx:for="{{event.descriptionParagraphs}}" wx:key="index">
+        <view class="paragraph mb-8">{{item}}</view>
+      </block>
+    </view>
+  </view>
+ 
+  <!-- 已经报名的小伙伴 -->
+  <view class="card attendees-card mb-40">
+    <view class="section-title text-medium mb-16 flex flex-between">
+      <text>已报名校友</text>
+      <text class="text-tertiary text-xs">共 {{event.attendingCount}} 人</text>
+    </view>
+    <scroll-view scroll-x class="attendees-scroll">
+      <view class="attendees-list flex">
+        <block wx:for="{{event.attendees}}" wx:key="index">
+          <view class="attendee-item flex flex-col items-center mr-16">
+            <image 
+              class="attendee-img avatar avatar-md mb-8" 
+              src="{{item.avatar || '/assets/images/default-avatar.png'}}" 
+              mode="aspectFill" 
+            />
+            <text class="attendee-name text-ellipsis text-xs text-secondary">{{item.nickname}}</text>
+            <text class="attendee-school text-xs text-tertiary">{{item.schoolShort}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+ 
+  <!-- 底部固定操作栏 -->
+  <view class="bottom-bar safe-bottom flex flex-between items-center">
+    <button class="btn btn-outline share-btn flex flex-center" open-type="share">
+      <view class="icon icon-share text-primary mr-8"></view>
+      <text class="share-txt">分享</text>
+    </button>
+    <button 
+      class="btn btn-primary btn-block register-cta {{event.registered ? 'btn-disabled' : ''}}" 
+      bindtap="onRegister"
+      disabled="{{event.registered || event.status !== 'recruiting'}}"
+    >
+      {{event.registered ? '已报名此活动' : (event.status === 'recruiting' ? '立即报名预约' : '活动已截止')}}
+    </button>
+  </view>
+
+  <!-- 未认证拦截弹窗 (Design Spec 4.4) -->
+  <view class="modal-mask flex flex-center" wx:if="{{showVerifyModal}}">
+    <view class="modal-box card">
+      <view class="modal-header text-bold text-center text-lg mb-16">开启完整校缘之旅</view>
+      <view class="modal-body text-secondary text-sm mb-24">
+        为了保障校友相亲的真实度与严肃性，查看详情、点赞及心动匹配需要先完成实名与学校认证。只需 2 分钟，即可结识南京大学/江南大学的优秀同学。
+      </view>
+      <view class="modal-footer flex gap-12">
+        <button class="btn btn-outline flex-1" bindtap="onCancelVerify">暂不认证</button>
+        <button class="btn btn-primary flex-1" bindtap="onConfirmVerify">立即去认证</button>
+      </view>
+    </view>
+  </view>
+</view>

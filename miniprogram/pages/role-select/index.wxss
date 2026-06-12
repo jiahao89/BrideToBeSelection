@@ -1,0 +1,151 @@
+.role-select-page {
+  background-color: #FFF9F6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 48rpx;
+  box-sizing: border-box;
+}
+
+/* 副标题 */
+.sub-heading {
+  padding-top: 48rpx;
+}
+
+.sub-desc {
+  color: var(--color-text-tertiary, #888888);
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+/* 角色卡片区域 */
+.role-cards-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+  justify-content: center;
+  margin-top: -80rpx;
+}
+
+/* 角色卡片 */
+.role-card {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  padding: 40rpx 32rpx;
+  border-radius: 24rpx;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  background-color: #FFFFFF;
+  border: 2rpx solid #E5EFFB;
+}
+
+/* 选中态 */
+.role-card.selected {
+  background-color: #FFF0ED;
+  border-color: #FF7A59;
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 24rpx rgba(255, 122, 89, 0.08);
+}
+
+.role-card:active {
+  transform: translateY(-2rpx);
+}
+
+/* 装饰光斑 (仅在桃红卡片上) */
+.card-blur-circle {
+  position: absolute;
+  right: -24rpx;
+  top: -24rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  filter: blur(20rpx);
+  pointer-events: none;
+}
+
+/* 图标容器 */
+.role-icon-circle {
+  flex-shrink: 0;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #FFF0ED; /* 未选中状态为浅桃粉底色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.role-card.selected .role-icon-circle {
+  background: #FFFFFF; /* 选中状态为纯白底色 */
+}
+
+/* 角色内容 */
+.role-content {
+  flex: 1;
+}
+
+.role-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--color-text-primary, #333333);
+  margin-bottom: 8rpx;
+}
+
+.role-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+/* 选中指示器 */
+.selection-indicator {
+  flex-shrink: 0;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background-color: #FF7A59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection-indicator .check-icon {
+  color: #FFFFFF;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+/* 底部按钮 */
+.bottom-action {
+  padding: 32rpx 0;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  margin-top: auto;
+}
+
+/* 渐变按钮 */
+.btn-gradient {
+  background: linear-gradient(90deg, #FF9E84 0%, #FF7A59 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 24rpx !important;
+  height: 96rpx !important;
+  font-size: 32rpx !important;
+  font-weight: 700 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(255, 122, 89, 0.2);
+  transition: opacity 0.3s ease;
+}
+
+.btn-gradient[disabled] {
+  opacity: 0.5;
+  box-shadow: none;
+}

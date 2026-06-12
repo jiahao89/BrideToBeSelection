@@ -1,0 +1,80 @@
+<view class="page-container report-page">
+  <!-- 头部提示 -->
+  <view class="tip-box">
+    <text class="tip-text text-secondary">请真实客观地反映问题。为了保障校友社区的严肃与真实性，我们将会在24小时内人工核实您的举报内容，并对违规账号进行处理。</text>
+  </view>
+
+  <!-- 举报对象 -->
+  <view class="section-title text-medium mb-8">被举报人</view>
+  <view class="target-card card flex items-center mb-24">
+    <image class="target-avatar avatar avatar-md mr-16" src="{{targetAvatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+    <view class="target-meta">
+      <view class="target-name text-medium text-lg">{{targetName || '校友嘉宾'}}</view>
+      <view class="target-school text-sm text-tertiary">{{targetSchool || '已通过实名认证'}}</view>
+    </view>
+  </view>
+
+  <!-- 举报分类 -->
+  <view class="section-title text-medium mb-12">选择举报类型<text class="required">*</text></view>
+  <view class="category-grid mb-24">
+    <block wx:for="{{categories}}" wx:key="index">
+      <view 
+        class="category-item {{selectedCategory === index ? 'active' : ''}}" 
+        bindtap="onSelectCategory" 
+        data-index="{{index}}"
+      >
+        <text class="category-name">{{item}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 问题描述 -->
+  <view class="section-title text-medium mb-8">详细描述原因<text class="required">*</text></view>
+  <view class="textarea-wrapper {{errorMsg ? 'error-border' : ''}} mb-8">
+    <textarea 
+      class="input-textarea" 
+      placeholder="请详细描述举报原因，例如：对方微信无法添加、发布商业广告、言论不当等（最少 10 字，最多 200 字）" 
+      maxlength="200" 
+      value="{{description}}"
+      bindinput="onInputDescription"
+      placeholder-class="text-tertiary"
+    />
+    <view class="char-count text-tertiary text-xs">{{description.length}}/200</view>
+  </view>
+  
+  <!-- 错误提示 -->
+  <view wx:if="{{errorMsg}}" class="error-msg-text text-danger text-sm mb-16">
+    * {{errorMsg}}
+  </view>
+
+  <!-- 上传截图证据 -->
+  <view class="section-title text-medium mb-12">上传截图凭证 (选填，最多3张)</view>
+  <view class="image-uploader-grid mb-32">
+    <block wx:for="{{images}}" wx:key="index">
+      <view class="uploader-preview">
+        <image class="preview-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{item}}" />
+        <view class="delete-btn flex flex-center" bindtap="onDeleteImage" data-index="{{index}}">×</view>
+      </view>
+    </block>
+    
+    <view 
+      wx:if="{{images.length < 3}}" 
+      class="uploader-add-btn flex flex-col flex-center" 
+      bindtap="onChooseImage"
+    >
+      <text class="plus-icon">+</text>
+      <text class="add-text text-xs text-tertiary">上传图片</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="action-box safe-bottom">
+    <button 
+      class="btn btn-primary btn-block btn-lg {{submitting ? 'btn-disabled' : ''}}" 
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '提交中...' : '提交举报'}}
+    </button>
+  </view>
+</view>

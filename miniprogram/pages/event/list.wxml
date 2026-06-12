@@ -1,0 +1,131 @@
+<view class="event-list-page">
+  <!-- 自定义顶部导航栏 (对齐 Stitch 高保真 TopAppBar) -->
+  <view class="custom-nav-spacer" style="height: {{navBarTotalHeight}}px;"></view>
+  <view class="custom-nav-bar" style="height: {{navBarTotalHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="custom-nav-left flex items-center" style="height: {{navBarHeight}}px;">
+      <view class="nav-icon-btn flex flex-center mr-8">
+        <view class="icon icon-school" style="width: 44rpx; height: 44rpx; color: var(--color-primary);"></view>
+      </view>
+      <text class="nav-title text-bold text-lg text-primary">校友活动</text>
+    </view>
+    <view class="custom-nav-right flex items-center" style="height: {{navBarHeight}}px;">
+      <view class="nav-icon-btn flex flex-center mr-16" bindtap="onSearchTap">
+        <view class="icon icon-search" style="width: 44rpx; height: 44rpx; color: var(--color-text-secondary);"></view>
+      </view>
+      <view class="nav-icon-btn flex flex-center" bindtap="onNotificationTap">
+        <view class="icon icon-bell" style="width: 44rpx; height: 44rpx; color: var(--color-text-secondary);"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 横向滚动分类 chips -->
+  <scroll-view scroll-x class="category-scroll-wrapper" show-scrollbar="{{false}}">
+    <view class="category-row flex mb-16 mt-16">
+      <view 
+        class="category-chip {{activeCategory === 'all' ? 'active' : ''}}" 
+        bindtap="onCategoryChange" 
+        data-category="all"
+      >
+        全部活动
+      </view>
+      <view 
+        class="category-chip {{activeCategory === 'nju' ? 'active' : ''}}" 
+        bindtap="onCategoryChange" 
+        data-category="nju"
+      >
+        南京大学
+      </view>
+      <view 
+        class="category-chip {{activeCategory === 'sytu' ? 'active' : ''}}" 
+        bindtap="onCategoryChange" 
+        data-category="sytu"
+      >
+        江南大学
+      </view>
+      <view 
+        class="category-chip {{activeCategory === 'outdoor' ? 'active' : ''}}" 
+        bindtap="onCategoryChange" 
+        data-category="outdoor"
+      >
+        同城户外
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 活动卡片列表 -->
+  <scroll-view 
+    scroll-y 
+    class="list-scroll" 
+    refresher-enabled 
+    refresher-triggered="{{loading}}" 
+    bindrefresherrefresh="fetchData"
+  >
+    <view class="card-list">
+      <block wx:for="{{filteredList}}" wx:key="_id">
+        <view class="event-card" bindtap="onEventTap" data-id="{{item._id}}">
+          <!-- 活动封面 -->
+          <view class="cover-wrapper aspect-video">
+            <image 
+              class="event-cover" 
+              src="{{item.cover || '/assets/images/default-event.png'}}" 
+              mode="aspectFill" 
+            />
+            <!-- 状态标签 -->
+            <view class="status-badge {{item.status}}">
+              {{item.statusText}}
+            </view>
+          </view>
+
+          <!-- 活动详情 -->
+          <view class="event-details mt-12">
+            <view class="event-title text-bold text-base mb-8">{{item.title}}</view>
+            
+            <view class="meta-row flex flex-col gap-6">
+              <view class="meta-item flex items-center">
+                <view class="icon icon-calendar meta-icon mr-8" style="background-color: var(--color-text-secondary);"></view>
+                <text class="meta-val text-secondary text-sm">时间: {{item.dateTimeStr}}</text>
+              </view>
+              <view class="meta-item flex items-center">
+                <view class="icon icon-mappin meta-icon mr-8" style="background-color: var(--color-text-secondary);"></view>
+                <text class="meta-val text-secondary text-sm">地点: {{item.location}}</text>
+              </view>
+            </view>
+
+            <!-- 细分割线与数据指标 -->
+            <view class="card-footer-divider mt-16"></view>
+            <view class="card-footer flex flex-between items-center mt-12">
+              <view class="participants flex items-center">
+                <view class="avatar-group flex">
+                  <block wx:for="{{item.attendingAvatars}}" wx:for-item="avatar" wx:key="index" wx:if="{{index < 3}}">
+                    <image 
+                      class="attendee-avatar avatar avatar-sm" 
+                      src="{{avatar || '/assets/images/default-avatar.png'}}" 
+                      mode="aspectFill"
+                      style="margin-left: {{index === 0 ? '0' : '-12rpx'}}; z-index: {{10 - index}};"
+                    />
+                  </block>
+                </view>
+                <text class="participants-count text-tertiary text-xs ml-8" wx:if="{{item.attendingCount > 0}}">
+                  +{{item.attendingCount}}
+                </text>
+              </view>
+              
+              <button 
+                class="btn btn-primary btn-sm register-btn"
+                catchtap="onRegisterBtnTap"
+                data-id="{{item._id}}"
+              >
+                {{item.status === 'closing' ? '抢占名额' : '立即报名'}}
+              </button>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{filteredList.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-state-text">暂无相关活动，去其他分类看看吧</text>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,176 @@
+.message-center-page {
+  background-color: var(--color-bg-page);
+  padding: var(--page-padding);
+}
+
+/* Segmented Tab Bar */
+.tabs-header-bar {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 90rpx;
+  border-bottom: 1rpx solid var(--color-border-light);
+}
+
+.tab-btn {
+  margin: 0;
+  height: 100%;
+  background-color: transparent;
+  border-radius: 0;
+  line-height: 1.5;
+}
+
+.tab-btn::after {
+  border: none;
+}
+
+.tab-btn-txt {
+  line-height: 1;
+}
+
+.active-tab-line {
+  position: absolute;
+  bottom: 0;
+  width: 48rpx;
+  height: 6rpx;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Scroll list */
+.message-scroll-list {
+  height: calc(100vh - 200rpx - env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.crush-list-container,
+.like-list-container {
+  padding-top: var(--spacing-12);
+}
+
+/* Message card */
+.message-card {
+  border: 1rpx solid var(--color-border-light);
+  background-color: var(--color-bg-card);
+}
+
+.card-header {
+  box-sizing: border-box;
+}
+
+.card-header:active {
+  background-color: var(--color-bg-page);
+}
+
+.sender-avatar {
+  border: 2rpx solid var(--color-border-light);
+}
+
+.new-badge {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 18rpx;
+  font-weight: var(--font-weight-bold);
+  padding: 4rpx 10rpx;
+  border-radius: var(--radius-full);
+  line-height: 1;
+}
+
+.message-time {
+  line-height: 1;
+}
+
+.arrow-indicator {
+  line-height: 1;
+}
+
+/* Expanded panel */
+.expanded-panel {
+  background-color: var(--color-bg-page);
+  border: 1rpx solid rgba(255, 122, 89, 0.08);
+  border-radius: var(--radius-md);
+  box-sizing: border-box;
+}
+
+.connected-row {
+  line-height: 1;
+}
+
+.connected-row .icon-shield {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.qna-q {
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+}
+
+.qna-q .icon-heart {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.qna-a {
+  padding-left: 36rpx;
+}
+
+/* Action button row */
+.action-buttons-row {
+  margin-top: var(--spacing-16);
+}
+
+.reject-btn {
+  height: 80rpx !important;
+  font-size: var(--font-size-sm) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1rpx solid var(--color-border) !important;
+}
+
+.accept-btn {
+  height: 80rpx !important;
+  font-size: var(--font-size-sm) !important;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+  box-shadow: 0 4rpx 12rpx rgba(255, 122, 89, 0.2) !important;
+}
+
+.accept-btn .icon-chat {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* Like item card */
+.like-item-card {
+  border: 1rpx solid var(--color-border-light);
+  padding: var(--spacing-16) var(--spacing-20);
+}
+
+.like-school {
+  font-weight: var(--font-weight-regular);
+}
+
+.like-action-text .icon-heart {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.mr-12 { margin-right: var(--spacing-12); }
+.mr-8 { margin-right: var(--spacing-8); }
+.mr-4 { margin-right: var(--spacing-4); }
+.ml-8 { margin-left: var(--spacing-8); }
+.py-12 { padding-top: var(--spacing-12); padding-bottom: var(--spacing-12); }
+.py-16 { padding-top: var(--spacing-16); padding-bottom: var(--spacing-16); }
+.px-16 { padding-left: var(--spacing-16); padding-right: var(--spacing-16); }
+.px-20 { padding-left: var(--spacing-20); padding-right: var(--spacing-20); }
+.mx-16 { margin-left: var(--spacing-16); margin-right: var(--spacing-16); }
+.mb-16 { margin-bottom: var(--spacing-16); }
+.mb-12 { margin-bottom: var(--spacing-12); }
+.mb-4 { margin-bottom: var(--spacing-4); }
+.space-y-16 > view { margin-bottom: var(--spacing-16); }
+.space-y-16 > view:last-child { margin-bottom: 0; }
+.gap-12 { gap: var(--spacing-12); }
+.flex-1 { flex: 1; }
+.flex-1-5 { flex: 1.5; }

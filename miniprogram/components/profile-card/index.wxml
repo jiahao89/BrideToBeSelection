@@ -1,0 +1,83 @@
+<!-- 资料卡组件 - 用于推荐列表和搜索结果 -->
+<view class="profile-card {{isUndisclosed ? 'undisclosed-card' : ''}}" bind:tap="onCardTap">
+  <!-- 头像区域 -->
+  <view class="card-header">
+    <view class="photo-wrapper">
+      <image
+        wx:if="{{photoUrl}}"
+        class="photo"
+        src="{{photoUrl}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="photo-placeholder">
+        <text class="photo-placeholder-text">{{gender === 'male' ? '♂' : '♀'}}</text>
+      </view>
+      <!-- 照片隐藏提示 -->
+      <view wx:if="{{photoHidden}}" class="photo-mask">
+        <text class="photo-mask-text">{{photoHiddenText}}</text>
+      </view>
+    </view>
+
+    <!-- 基础信息 -->
+    <view class="info-main">
+      <view class="name-row">
+        <text class="nickname">{{nickname || '用户'}}</text>
+        <text class="age-tag">{{age}}岁</text>
+        <image
+          class="gender-icon"
+          src="{{gender === 'male' ? '/assets/icons/male.png' : '/assets/icons/female.png'}}"
+        />
+      </view>
+
+      <view class="quick-info">
+        <text class="info-item">{{height}}cm</text>
+        <text class="info-dot">·</text>
+        <text class="info-item">{{educationLabel}}</text>
+        <text class="info-dot">·</text>
+        <text class="info-item">{{schoolDisplay}}</text>
+      </view>
+
+      <view class="quick-info">
+        <text class="info-item">{{companyDisplay}}</text>
+        <text wx:if="{{incomeLabel}}" class="info-dot">·</text>
+        <text wx:if="{{incomeLabel}}" class="info-item">{{incomeLabel}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 认证标签区 -->
+  <view class="verify-tags" wx:if="{{verifyTags.length > 0}}">
+    <view
+      wx:for="{{verifyTags}}"
+      wx:key="type"
+      class="verify-tag verify-tag-{{item.type}}"
+    >
+      <text>✓ {{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 婚史暂不披露黄牌 -->
+  <view wx:if="{{isUndisclosed}}" class="undisclosed-badge">
+    ⚠ 婚史：暂不披露
+  </view>
+
+  <!-- 媒人背书 -->
+  <view wx:if="{{endorsement}}" class="endorsement-bar">
+    <view class="endorsement-icon">🤝</view>
+    <view class="endorsement-content">
+      <text class="endorsement-label">媒人推荐</text>
+      <text class="endorsement-text text-clamp-2">{{endorsement}}</text>
+    </view>
+  </view>
+
+  <!-- 关系链（互选后展示）-->
+  <view wx:if="{{relationPath}}" class="relation-bar">
+    <text class="relation-label">🔗 关系链</text>
+    <text class="relation-text">{{relationPath}}</text>
+  </view>
+
+  <!-- 里程碑标签（匹配列表中展示）-->
+  <view wx:if="{{milestone}}" class="milestone-tag milestone-{{milestone}}">
+    {{milestoneLabel}}
+  </view>
+</view>

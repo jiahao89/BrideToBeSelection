@@ -1,0 +1,118 @@
+<view class="page-container recommend-page">
+  <!-- 自定义顶部导航栏 (对齐 Stitch 高保真 TopAppBar) -->
+  <view class="custom-nav-spacer" style="height: {{navBarTotalHeight}}px;"></view>
+  <view class="custom-nav-bar" style="height: {{navBarTotalHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="custom-nav-left" style="height: {{navBarHeight}}px;">
+      <view class="nav-icon-btn flex flex-center">
+        <view class="icon icon-school" style="width: 44rpx; height: 44rpx; color: var(--color-primary);"></view>
+      </view>
+      <text class="nav-title text-bold">校缘</text>
+    </view>
+    <view class="custom-nav-right" style="height: {{navBarHeight}}px;">
+      <view class="nav-icon-btn flex flex-center" bindtap="onSearchTap">
+        <view class="icon icon-search" style="width: 44rpx; height: 44rpx; color: var(--color-primary);"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顶部 Banner 卡片 (对齐 Stitch 原生设计，带渐变和文字图层) -->
+  <view class="promo-banner" bindtap="onBannerTap">
+    <image 
+      class="banner-img" 
+      src="https://lh3.googleusercontent.com/aida/AP1WRLvqmbXZZX-2v-REPhKk_Lm3PxG95aamuh5pPdsKTdnN3847M4p8eIT_-qAmd9IhHGKsXgYdqSv3hf_d3caVWVLY27GtdBdRmFBTXSxyvQ60iDrgQ84LSujF7P7B-VzUWf_lsyEkB02ofhbHCEWImEPQljUdAwcyT7MglW03DRQhxozlOJTkwyE5K8QIW6WUP3sDsPn-vayEFMEg5sIHJ-00kB-75bjH-VHK5DLcUj1pGuG8_rhynUA5hA" 
+      mode="aspectFill"
+    />
+    <view class="banner-overlay flex flex-col justify-end p-16">
+      <view class="banner-title text-white text-bold text-lg">寻找志同道合的校友</view>
+      <view class="banner-subtitle text-white text-xs mt-4">在这里，遇见那个懂你的 TA</view>
+    </view>
+  </view>
+
+  <!-- 筛选栏 (按 Stitch 依次为：学校、年龄、家乡、学历) -->
+  <scroll-view scroll-x class="filter-scroll-wrapper" show-scrollbar="{{false}}">
+    <view class="filter-row flex mb-16">
+      <view class="filter-badge flex items-center {{filters.school !== 'all' ? 'active' : ''}}" bindtap="onFilterTap" data-type="school">
+        <text class="filter-txt text-sm {{filters.school !== 'all' ? 'active' : ''}}">{{filters.school === 'all' ? '学校' : filters.school}}</text>
+        <view class="icon icon-chevron-down filter-arrow-icon {{filters.school !== 'all' ? 'active' : ''}}"></view>
+      </view>
+      <view class="filter-badge flex items-center {{filters.age !== 'all' ? 'active' : ''}}" bindtap="onFilterTap" data-type="age">
+        <text class="filter-txt text-sm {{filters.age !== 'all' ? 'active' : ''}}">{{filters.age === 'all' ? '年龄' : (filters.age === '22-25' ? '22-25岁' : (filters.age === '26-28' ? '26-28岁' : '29岁+'))}}</text>
+        <view class="icon icon-chevron-down filter-arrow-icon {{filters.age !== 'all' ? 'active' : ''}}"></view>
+      </view>
+      <view class="filter-badge flex items-center {{filters.hometown !== 'all' ? 'active' : ''}}" bindtap="onFilterTap" data-type="hometown">
+        <text class="filter-txt text-sm {{filters.hometown !== 'all' ? 'active' : ''}}">{{filters.hometown === 'all' ? '家乡' : filters.hometown}}</text>
+        <view class="icon icon-chevron-down filter-arrow-icon {{filters.hometown !== 'all' ? 'active' : ''}}"></view>
+      </view>
+      <view class="filter-badge flex items-center {{filters.degree !== 'all' ? 'active' : ''}}" bindtap="onFilterTap" data-type="degree">
+        <text class="filter-txt text-sm {{filters.degree !== 'all' ? 'active' : ''}}">{{filters.degree === 'all' ? '学历' : filters.degree}}</text>
+        <view class="icon icon-chevron-down filter-arrow-icon {{filters.degree !== 'all' ? 'active' : ''}}"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 嘉宾卡片网格 (支持下拉刷新) -->
+  <scroll-view 
+    scroll-y 
+    class="feed-scroll" 
+    refresher-enabled 
+    refresher-triggered="{{loading}}" 
+    bindrefresherrefresh="fetchData"
+  >
+    <view class="grid-container">
+      <block wx:for="{{list}}" wx:key="_id" wx:for-index="idx">
+        <view class="guest-card" bindtap="onCardTap" data-id="{{item._id}}">
+          <!-- 统一设置图片的高宽比为 1:1 正方形，与 Stitch 完全对齐 -->
+          <view class="image-wrap aspect-square">
+            <image class="avatar-img" src="{{item.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+            <!-- 右上角悬浮爱心按钮 -->
+            <view class="heart-float flex flex-center" catchtap="onLikeToggle" data-id="{{item._id}}">
+              <view class="icon icon-heart heart-icon {{item.isLiked ? 'liked' : ''}}"></view>
+            </view>
+          </view>
+          
+          <view class="guest-info flex flex-col justify-between">
+            <view class="guest-info-header flex flex-between items-center">
+              <text class="guest-name text-bold">{{item.nickname}}</text>
+              <text class="guest-school-badge">{{item.schoolShort || item.school}}</text>
+            </view>
+            <text class="guest-desc text-xs text-secondary mt-8">{{item.job || '校友'}} · {{item.city || '同城'}} · {{item.age || 25}}岁</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{list.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-state-text">暂无推荐，稍后再来看看吧</text>
+    </view>
+  </scroll-view>
+
+  <!-- 筛选面板弹窗 (对齐 Stitch 弹窗规范：背景磨砂半透明遮罩) -->
+  <view class="filter-popup-container {{showFilterPopup ? 'show' : ''}}" catchtouchmove="true">
+    <!-- 遮罩层 -->
+    <view class="filter-popup-mask" bindtap="onCloseFilterPopup"></view>
+    
+    <!-- 内容面板 -->
+    <view class="filter-popup-content">
+      <view class="filter-popup-header flex flex-between items-center">
+        <text class="filter-popup-title text-bold text-base">筛选{{filterTitle}}</text>
+        <view class="filter-popup-close-btn" bindtap="onCloseFilterPopup">
+          <view class="icon icon-block" style="width: 36rpx; height: 36rpx; color: var(--color-text-secondary);"></view>
+        </view>
+      </view>
+      
+      <scroll-view scroll-y class="filter-options-list">
+        <block wx:for="{{filterOptions[activeFilterType]}}" wx:key="value">
+          <view 
+            class="filter-option-item flex flex-between items-center {{filters[activeFilterType] === item.value ? 'selected' : ''}}"
+            bindtap="onSelectFilterOption"
+            data-value="{{item.value}}"
+          >
+            <text class="filter-option-label {{filters[activeFilterType] === item.value ? 'text-primary text-bold' : 'text-secondary'}}">{{item.label}}</text>
+            <view class="icon icon-badge-check filter-selected-icon" wx:if="{{filters[activeFilterType] === item.value}}"></view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+  </view>
+</view>

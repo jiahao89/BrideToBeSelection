@@ -1,0 +1,19 @@
+# Local / System files
+.DS_Store
+Thumbs.db
+
+# WeChat Mini Program private configuration
+project.private.config.json
+
+# NPM dependencies
+node_modules/
+miniprogram_npm/
+
+# IDE / Editor configuration files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

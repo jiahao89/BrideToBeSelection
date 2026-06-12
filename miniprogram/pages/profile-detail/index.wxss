@@ -1,0 +1,210 @@
+.profile-detail-page {
+  background-color: var(--color-bg-page);
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+.portrait-wrapper {
+  width: 100%;
+  height: 800rpx; /* aspect ratio 4:5 on standard screen width */
+  overflow: hidden;
+  position: relative;
+  background-color: var(--color-border-light);
+}
+
+.portrait-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.portrait-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Detail content layout */
+.detail-content-box {
+  box-sizing: border-box;
+}
+
+.guest-name {
+  color: var(--color-text-primary);
+}
+
+.active-status {
+  color: var(--color-text-secondary);
+}
+
+.meta-row {
+  border-bottom: 1rpx solid var(--color-border-light);
+  padding-bottom: var(--spacing-8);
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+}
+
+.meta-tag .icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.tag-val {
+  line-height: 1;
+}
+
+/* Green verified badge (Stitch) */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: #E8F5E9; /* secondary-container */
+  color: #2E7D32;            /* secondary green */
+  border: 1rpx solid rgba(46, 125, 50, 0.1);
+  padding: 8rpx var(--spacing-16);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+}
+
+.badge-check-icon {
+  margin-right: var(--spacing-8);
+  font-weight: bold;
+}
+
+.badge-text {
+  line-height: 1;
+}
+
+/* Contact locked card */
+.contact-locked-card {
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1rpx solid var(--color-border);
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+}
+
+.card-title-row .icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: var(--spacing-8);
+}
+
+.title-text {
+  color: var(--color-text-primary);
+}
+
+.dashed-lock-box {
+  background-color: var(--color-bg-page);
+  border: 2rpx dashed var(--color-border);
+  border-radius: var(--radius-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.verified-notice {
+  line-height: 1;
+}
+
+.verified-notice .icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.lock-indicator {
+  background-color: rgba(216, 194, 188, 0.2);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+}
+
+.lock-indicator .icon,
+.qna-answer-locked .icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: var(--spacing-4);
+}
+
+.lock-text {
+  line-height: 1;
+}
+
+/* Icebreaker Question cards */
+.qna-card {
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+.qna-question {
+  background-color: var(--color-primary-light);
+  border-bottom: 1rpx solid var(--color-border-light);
+}
+
+.question-text {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+}
+
+.qna-answer-locked {
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-tip {
+  color: var(--color-text-tertiary);
+}
+
+/* Extra Bio tags & description */
+.bio-pill {
+  padding: 8rpx var(--spacing-12);
+  background-color: var(--color-border-light);
+  border-radius: var(--radius-full);
+}
+
+.bio-intro-text {
+  font-style: italic;
+}
+
+/* Sticky Action Footer */
+.detail-footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg-card);
+  padding: var(--spacing-12) var(--spacing-32);
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.05);
+  z-index: 900;
+}
+
+.footer-like-btn {
+  border-width: 2rpx;
+}
+
+.footer-crush-btn {
+  background: linear-gradient(135deg, #FF7A59 0%, #FF9A7B 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-footer-bar .icon {
+  margin-right: var(--spacing-8);
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.btn-txt {
+  font-weight: var(--font-weight-bold);
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-1-5 {
+  flex: 1.5;
+}

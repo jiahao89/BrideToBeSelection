@@ -1,0 +1,139 @@
+<view class="page-container mine-page">
+  <!-- 4.3 场景三：人工审核不通过/被驳回异常提示 (Yellow Banner) -->
+  <view class="rejection-banner flex flex-between items-center mb-16" wx:if="{{profile.rejected}}">
+    <view class="rejection-content flex items-center">
+      <view class="icon icon-warning mr-8" style="background-color: #D97706;"></view>
+      <text class="rejection-text text-sm">您的[学历认证]申请被驳回。原因：{{profile.rejectReason}}</text>
+    </view>
+    <view class="rejection-action text-sm" bindtap="onGoToVerification">重新认证</view>
+  </view>
+
+  <!-- 用户个人卡片 (Header) -->
+  <view class="profile-header-card card flex items-center mb-16">
+    <view class="avatar-container relative">
+      <image class="user-avatar avatar avatar-lg" src="{{profile.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="verified-avatar-badge flex flex-center" wx:if="{{profile.eduVerified}}">
+        <view class="icon icon-badge-check" style="width: 24rpx; height: 24rpx; color: #FFFFFF;"></view>
+      </view>
+    </view>
+    <view class="user-meta ml-16 flex-1">
+      <view class="name-row flex items-center mb-8">
+        <text class="user-nickname text-bold text-xl">{{profile.nickname || '校友用户'}}</text>
+        <text class="role-tag ml-8">{{profile.role === 'single' ? '单身校友' : '校友介绍人'}}</text>
+      </view>
+      <view class="school-row text-sm text-secondary mb-8" wx:if="{{profile.school}}">
+        {{profile.school}} · {{profile.degree || '硕士'}}
+      </view>
+      <view class="verified-status-row flex items-center text-success text-xs text-bold" wx:if="{{profile.eduVerified}}">
+        <view class="icon icon-badge-check mr-4" style="width: 24rpx; height: 24rpx; color: #10B981;"></view>
+        <text>已认证</text>
+      </view>
+    </view>
+  </view>
+ 
+  <!-- 数据统计网格 (Stats Grid) -->
+  <view class="stats-grid card flex mb-16">
+    <view class="stats-item flex-1 flex flex-col items-center">
+      <text class="stats-num text-bold text-xl text-primary">{{profile.followersCount || 24}}</text>
+      <text class="stats-label text-xs text-secondary mt-4">关注我的</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item flex-1 flex flex-col items-center">
+      <text class="stats-num text-bold text-xl text-primary">{{profile.matchCount || 3}}</text>
+      <text class="stats-label text-xs text-secondary mt-4">互加微信</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item flex-1 flex flex-col items-center">
+      <text class="stats-num text-bold text-xl text-primary">{{profile.likeCount || 88}}</text>
+      <text class="stats-label text-xs text-secondary mt-4">同频点赞</text>
+    </view>
+  </view>
+ 
+  <!-- 操作菜单列表 (Menu Actions) -->
+  <view class="menu-card card mb-24">
+    <!-- 我的心动设置 -->
+    <view class="menu-item flex flex-between items-center py-16" bindtap="onSettingsHeart">
+      <view class="menu-title flex items-center">
+        <view class="menu-icon-bg bg-orange flex flex-center mr-12">
+          <view class="icon icon-settings text-white" style="width: 36rpx; height: 36rpx; color: #FF7A59;"></view>
+        </view>
+        <text class="menu-text">我的心动设置</text>
+      </view>
+      <text class="menu-arrow text-tertiary">❯</text>
+    </view>
+    <view class="item-divider"></view>
+ 
+    <!-- 收到的破冰回答 -->
+    <view class="menu-item flex flex-between items-center py-16" bindtap="onReceivedAnswers">
+      <view class="menu-title flex items-center">
+        <view class="menu-icon-bg bg-blue flex flex-center mr-12">
+          <view class="icon icon-chat text-white" style="width: 36rpx; height: 36rpx; color: #3B82F6;"></view>
+        </view>
+        <text class="menu-text">收到的破冰回答</text>
+      </view>
+      <view class="menu-extra flex items-center">
+        <view class="unread-dot-badge mr-8" wx:if="{{profile.hasUnreadAnswers}}"></view>
+        <text class="menu-arrow text-tertiary">❯</text>
+      </view>
+    </view>
+    <view class="item-divider"></view>
+ 
+    <!-- 资质认证中心 -->
+    <view class="menu-item flex flex-between items-center py-16" bindtap="onGoToVerification">
+      <view class="menu-title flex items-center">
+        <view class="menu-icon-bg bg-green flex flex-center mr-12">
+          <view class="icon icon-shield text-white" style="width: 36rpx; height: 36rpx; color: #10B981;"></view>
+        </view>
+        <text class="menu-text">资质认证中心</text>
+      </view>
+      <view class="menu-extra flex items-center">
+        <text class="menu-status-text text-sm text-success mr-8" wx:if="{{profile.eduVerified}}">已认证</text>
+        <text class="menu-status-text text-sm text-primary mr-8" wx:else>未完成</text>
+        <text class="menu-arrow text-tertiary">❯</text>
+      </view>
+    </view>
+    <view class="item-divider"></view>
+ 
+    <!-- 我发起的心动 -->
+    <view class="menu-item flex flex-between items-center py-16" bindtap="onMyCrushList">
+      <view class="menu-title flex items-center">
+        <view class="menu-icon-bg bg-red flex flex-center mr-12">
+          <view class="icon icon-heart text-white" style="width: 36rpx; height: 36rpx; color: #EF4444;"></view>
+        </view>
+        <text class="menu-text">我发起的心动</text>
+      </view>
+      <text class="menu-arrow text-tertiary">❯</text>
+    </view>
+    <view class="item-divider"></view>
+ 
+    <!-- 我的破冰问题 -->
+    <view class="menu-item flex flex-between items-center py-16" bindtap="onMyIcebreakers">
+      <view class="menu-title flex items-center">
+        <view class="menu-icon-bg bg-purple flex flex-center mr-12">
+          <view class="icon icon-help text-white" style="width: 36rpx; height: 36rpx; color: #8B5CF6;"></view>
+        </view>
+        <text class="menu-text">我的破冰问题</text>
+      </view>
+      <text class="menu-arrow text-tertiary">❯</text>
+    </view>
+  </view>
+
+  <!-- 客服与咨询板块 (Help/Support Section) -->
+  <view class="service-support-card flex flex-between items-center mb-40">
+    <view class="support-left flex items-center">
+      <view class="support-icon-circle flex flex-center mr-12">
+        <view class="icon icon-users" style="width: 44rpx; height: 44rpx; color: #FF7A59;"></view>
+      </view>
+      <view class="support-content">
+        <view class="support-title text-bold text-sm">联系客服</view>
+        <view class="support-subtitle text-xs text-secondary mt-4">为您解答使用中的任何疑问</view>
+      </view>
+    </view>
+    <button class="support-btn" bindtap="onContactService">咨询</button>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="footer-info text-center pb-40">
+    <view class="version-text text-xs text-tertiary">六朝松校缘小程序 v1.0.0 (MVP)</view>
+  </view>
+</view>

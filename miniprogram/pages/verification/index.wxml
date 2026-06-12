@@ -1,0 +1,329 @@
+<view class="page-container verification-page">
+  <!-- Brand Logo Header (Stitch design) -->
+  <view class="header-banner text-center mb-24">
+    <image 
+      class="brand-logo mb-12" 
+      src="https://lh3.googleusercontent.com/aida/AP1WRLv7IPOblytTKdOooQ8DGnMkCJ6T0gEIYMnid2ziEBPGG2yVrvfcPxDva7kE9b-7a7DlFMsV1lSYX3d1x-9CgQTNv6smckkK-nRq6gukphBA4WkKA73zYPt2cDGqEdP6whQEGdYNFjZ3CukOctjZKJjZGj8HY6K1QQkLKxGg-PayjmrRs5edSiJTpsAPKp0KOOviXa7TQJDj-YUCaWSddBI_eRv0OdmFMdfjQgp_Exx5gDkeMbd1gAiYFQk" 
+      mode="aspectFill"
+    />
+    <view class="banner-main-title text-bold text-xl mb-4">完成资质认证</view>
+    <view class="banner-sub-desc text-sm text-secondary">点亮校友身份，开启纯粹社交体验</view>
+  </view>
+
+  <!-- Progress Stepper (Stitch design) -->
+  <view class="stepper-box mb-32">
+    <view class="stepper-line-base"></view>
+    <view class="stepper-line-active" style="width: {{(step - 1) * 20 + 10}}%"></view>
+    
+    <view class="stepper-items flex flex-between">
+      <!-- Step 1 -->
+      <view class="step-item flex flex-col items-center">
+        <view class="step-dot {{step >= 1 ? 'active' : ''}}">1</view>
+        <text class="step-label text-sm {{step >= 1 ? 'text-primary text-medium' : 'text-tertiary'}}">实名</text>
+      </view>
+      <!-- Step 2 -->
+      <view class="step-item flex flex-col items-center">
+        <view class="step-dot {{step >= 2 ? 'active' : ''}}">2</view>
+        <text class="step-label text-sm {{step >= 2 ? 'text-primary text-medium' : 'text-tertiary'}}">学历</text>
+      </view>
+      <!-- Step 3 -->
+      <view class="step-item flex flex-col items-center">
+        <view class="step-dot {{step >= 3 ? 'active' : ''}}">3</view>
+        <text class="step-label text-sm {{step >= 3 ? 'text-primary text-medium' : 'text-tertiary'}}">工作</text>
+      </view>
+      <!-- Step 4 -->
+      <view class="step-item flex flex-col items-center">
+        <view class="step-dot {{step >= 4 ? 'active' : ''}}">4</view>
+        <text class="step-label text-sm {{step >= 4 ? 'text-primary text-medium' : 'text-tertiary'}}">婚姻</text>
+      </view>
+      <!-- Step 5 -->
+      <view class="step-item flex flex-col items-center">
+        <view class="step-dot {{step >= 5 ? 'active' : ''}}">5</view>
+        <text class="step-label text-sm {{step >= 5 ? 'text-primary text-medium' : 'text-tertiary'}}">资料</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Step 1: 实名认证 -->
+  <view class="step-form-card card p-24" wx:if="{{step === 1}}">
+    <view class="card-section-title text-bold text-lg mb-24">基础身份认证</view>
+    
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">真实姓名<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-user text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="仅用于实名核验，不对外展示" 
+          value="{{realName}}" 
+          bindinput="onInputRealName" 
+        />
+      </view>
+    </view>
+ 
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">身份证号<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-card text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="用于核验校友真实身份，严格加密" 
+          value="{{idCard}}" 
+          bindinput="onInputIdCard" 
+          type="idcard"
+        />
+      </view>
+    </view>
+ 
+    <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
+      {{errorMsg}}
+    </view>
+ 
+    <view class="security-notice flex items-start mt-16">
+      <view class="icon icon-lock text-primary mr-8"></view>
+      <text class="security-txt text-sm text-secondary leading-relaxed">您的信息已通过国密级别算法加密传输，校缘平台承诺对实名数据严格保密，仅作为圈层可信度背书使用。</text>
+    </view>
+  </view>
+
+  <!-- Step 2: 学历认证 -->
+  <view class="step-form-card card p-24" wx:if="{{step === 2}}">
+    <view class="card-section-title text-bold text-lg mb-24">最高学历信息</view>
+    
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">毕业院校<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center" bindtap="onSelectUniversity">
+        <view class="icon icon-school text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="点击选择：南京大学 / 江南大学 等" 
+          value="{{school}}" 
+          disabled 
+        />
+        <text class="input-arrow text-tertiary">❯</text>
+      </view>
+    </view>
+ 
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">最高学历<text class="required text-danger ml-4">*</text></view>
+      <view class="degree-chips flex gap-12">
+        <view 
+          class="degree-chip flex-1 text-center py-8 text-base {{degree === 'bachelor' ? 'active' : ''}}" 
+          bindtap="onSelectDegree" 
+          data-value="bachelor"
+        >
+          本科
+        </view>
+        <view 
+          class="degree-chip flex-1 text-center py-8 text-base {{degree === 'master' ? 'active' : ''}}" 
+          bindtap="onSelectDegree" 
+          data-value="master"
+        >
+          硕士
+        </view>
+        <view 
+          class="degree-chip flex-1 text-center py-8 text-base {{degree === 'phd' ? 'active' : ''}}" 
+          bindtap="onSelectDegree" 
+          data-value="phd"
+        >
+          博士
+        </view>
+      </view>
+    </view>
+
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">学号/学籍证明编号<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-card text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="请输入您的学籍或毕业证编号" 
+          value="{{studentId}}" 
+          bindinput="onInputStudentId" 
+        />
+      </view>
+    </view>
+
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">就读专业<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-work text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="例如：计算机科学与技术" 
+          value="{{major}}" 
+          bindinput="onInputMajor" 
+        />
+      </view>
+    </view>
+
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">入学年份<text class="required text-danger ml-4">*</text></view>
+      <picker mode="selector" range="{{gradeOptions}}" bindchange="onGradeChange">
+        <view class="input-container flex items-center">
+          <view class="icon icon-calendar text-tertiary"></view>
+          <text class="form-input flex-1 ml-8 text-base {{grade ? 'text-primary-dark' : 'text-placeholder'}}" style="color: {{grade ? '#1E293B' : '#94A3B8'}};">
+            {{grade || '点击选择入学年份'}}
+          </text>
+          <text class="input-arrow text-tertiary">❯</text>
+        </view>
+      </picker>
+    </view>
+ 
+    <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
+      {{errorMsg}}
+    </view>
+  </view>
+
+  <!-- Step 3: 工作认证 -->
+  <view class="step-form-card card p-24" wx:if="{{step === 3}}">
+    <view class="card-section-title text-bold text-lg mb-24">工作行业信息</view>
+    
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">工作单位/公司名称<text class="text-secondary ml-4">(选填)</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-school text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="例如：阿里巴巴 / 字节跳动 (选填)" 
+          value="{{company}}" 
+          bindinput="onInputCompany" 
+        />
+      </view>
+    </view>
+
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">职业/岗位名称<text class="text-secondary ml-4">(选填)</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-work text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="例如：高级软件工程师 / 产品经理 (选填)" 
+          value="{{job}}" 
+          bindinput="onInputJob" 
+        />
+      </view>
+    </view>
+ 
+    <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
+      {{errorMsg}}
+    </view>
+  </view>
+
+  <!-- Step 4: 婚姻状况 -->
+  <view class="step-form-card card p-24" wx:if="{{step === 4}}">
+    <view class="card-section-title text-bold text-lg mb-24">婚姻状况认证</view>
+    
+    <view class="input-group mb-16">
+      <view class="input-label mb-16 text-center">请确认您当前的婚姻状态<text class="required text-danger ml-4">*</text></view>
+      <view class="degree-chips flex flex-col gap-12">
+        <view 
+          class="degree-chip text-center py-12 text-base {{maritalStatus === 'single' ? 'active' : ''}}" 
+          bindtap="onSelectMaritalStatus" 
+          data-value="single"
+        >
+          未婚（单身）
+        </view>
+        <view 
+          class="degree-chip text-center py-12 text-base {{maritalStatus === 'divorced' ? 'active' : ''}}" 
+          bindtap="onSelectMaritalStatus" 
+          data-value="divorced"
+        >
+          离异
+        </view>
+        <view 
+          class="degree-chip text-center py-12 text-base {{maritalStatus === 'widowed' ? 'active' : ''}}" 
+          bindtap="onSelectMaritalStatus" 
+          data-value="widowed"
+        >
+          丧偶
+        </view>
+      </view>
+    </view>
+ 
+    <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
+      {{errorMsg}}
+    </view>
+  </view>
+
+  <!-- Step 5: 资料完善 -->
+  <view class="step-form-card card p-24" wx:if="{{step === 5}}">
+    <view class="card-section-title text-bold text-lg mb-24">完善个人资料</view>
+    
+    <!-- 生日 -->
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">出生日期<text class="text-secondary ml-4">(选填)</text></view>
+      <picker mode="date" value="{{birthday}}" end="2012-12-31" bindchange="onBirthdayChange">
+        <view class="input-container flex items-center">
+          <view class="icon icon-calendar text-tertiary"></view>
+          <text class="form-input flex-1 ml-8 text-base" style="color: {{birthday ? '#1E293B' : '#94A3B8'}};">
+            {{birthday || '请选择生日（选填）'}}
+          </text>
+          <text class="input-arrow text-tertiary">❯</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 星座 -->
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">星座<text class="text-secondary ml-4">(选填)</text></view>
+      <picker mode="selector" range="{{constellationOptions}}" bindchange="onConstellationChange">
+        <view class="input-container flex items-center">
+          <view class="icon icon-crown text-tertiary"></view>
+          <text class="form-input flex-1 ml-8 text-base" style="color: {{constellation ? '#1E293B' : '#94A3B8'}};">
+            {{constellation || '请选择或根据生日自动计算（选填）'}}
+          </text>
+          <text class="input-arrow text-tertiary">❯</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 微信号 -->
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">微信号<text class="required text-danger ml-4">*</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-chat text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="请输入微信号，互选成功后才会展示" 
+          value="{{wechatId}}" 
+          bindinput="onInputWechatId" 
+        />
+      </view>
+    </view>
+
+    <!-- 手机号 -->
+    <view class="input-group mb-16">
+      <view class="input-label mb-8">手机号<text class="text-secondary ml-4">(选填)</text></view>
+      <view class="input-container flex items-center">
+        <view class="icon icon-card text-tertiary"></view>
+        <input 
+          class="form-input flex-1 ml-8 text-base" 
+          placeholder="请输入手机号（选填）" 
+          value="{{mobile}}" 
+          bindinput="onInputMobile" 
+          type="number"
+        />
+      </view>
+    </view>
+ 
+    <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
+      {{errorMsg}}
+    </view>
+  </view>
+
+  <!-- Sticky Bottom Actions -->
+  <view class="bottom-action safe-bottom flex gap-12">
+    <button class="btn btn-outline flex-1" bindtap="{{step === 5 ? 'onPrev' : 'onSkip'}}">
+      {{step === 5 ? '上一步' : '跳过认证'}}
+    </button>
+    <button 
+      class="btn btn-primary flex-1 flex flex-center gap-8" 
+      bindtap="onSubmit" 
+      loading="{{submitting}}" 
+      disabled="{{submitting}}"
+    >
+      <text>{{step === 5 ? '完成建档' : '下一步'}}</text>
+      <text class="btn-arrow" wx:if="{{step < 5}}">❯</text>
+    </button>
+  </view>
+</view>

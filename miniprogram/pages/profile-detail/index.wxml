@@ -1,0 +1,105 @@
+<view class="page-container profile-detail-page">
+  <!-- 顶部大图轮播 -->
+  <view class="portrait-wrapper">
+    <swiper class="portrait-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" circular>
+      <swiper-item>
+        <image class="portrait-img" src="{{guest.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBj1iILsmZ8lMcnuqGX4OeZL8ulIC7dajUDqvUyLcV_R0I9t4GYgrnEQpeKzIH4zdrXCV-28cEHMr1NsbK4Z052J-_s1HqhmT_wwQSnPgZT-3CVxBU3Fnyissl6SgcbuCiJwAEG3dFhEhGln0XuUpLvCsOrDEfaggdu-Ia-y5igmqVp7WqqBC13zVNvHjQyYx0ZU3fLiwNMDcii4erFfuzG8GK9x0xOpwLKTX70GBrIxqiJMT5EBMo9siGmz1N45qeQ2t2ZVuNmu6Y'}}" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <view class="detail-content-box px-16 py-16">
+    <!-- 姓名与活跃状态 -->
+    <view class="name-status-row flex flex-between items-end mb-16">
+      <view class="guest-name text-bold text-2xl">{{guest.nickname}}</view>
+      <view class="active-status text-sm text-secondary">活跃于 5分钟前</view>
+    </view>
+
+    <!-- 基础属性标签 (带图标) -->
+    <view class="meta-row flex flex-wrap mb-16">
+      <view class="meta-tag flex items-center mr-16 mb-8">
+        <view class="icon icon-cake text-tertiary mr-4"></view>
+        <text class="tag-val text-sm text-secondary">{{guest.age || 26}}岁 ({{guest.birth_year || 1998}}年)</text>
+      </view>
+      <view class="meta-tag flex items-center mr-16 mb-8">
+        <view class="icon icon-ruler text-tertiary mr-4"></view>
+        <text class="tag-val text-sm text-secondary">{{guest.height || 163}}cm</text>
+      </view>
+      <view class="meta-tag flex items-center mr-16 mb-8">
+        <view class="icon icon-mappin text-tertiary mr-4"></view>
+        <text class="tag-val text-sm text-secondary">{{guest.hometown || '江苏无锡'}}</text>
+      </view>
+    </view>
+ 
+    <!-- 学校学历认证标签 (绿牌) -->
+    <view class="edu-badge-box mb-24" wx:if="{{guest.verified || true}}">
+      <view class="verified-badge flex items-center">
+        <view class="icon icon-shield text-success mr-4" style="background-color: #2E7D32;"></view>
+        <text class="badge-text text-sm">{{guest.school}} · {{guest.degree}}</text>
+      </view>
+    </view>
+ 
+    <!-- 微信联系方式锁定卡片 -->
+    <view class="contact-locked-card card mb-24">
+      <view class="card-title-row flex items-center mb-12">
+        <view class="icon icon-chat text-primary mr-8"></view>
+        <text class="title-text text-bold text-base">微信联系方式</text>
+      </view>
+      <view class="dashed-lock-box flex flex-col items-center py-16">
+        <view class="verified-notice flex items-center text-sm text-success text-bold mb-8">
+          <view class="icon icon-shield text-success mr-4" style="background-color: #10B981;"></view>
+          <text>已通过实名与学历认证</text>
+        </view>
+        <view class="lock-indicator flex items-center px-12 py-8">
+          <view class="icon icon-lock text-tertiary mr-4"></view>
+          <text class="lock-text text-xs text-secondary">互选成功后自动解锁微信</text>
+        </view>
+      </view>
+    </view>
+ 
+    <!-- 破冰问答锁定列表 -->
+    <view class="icebreakers-section mb-24">
+      <view class="card-title-row flex items-center mb-16">
+        <view class="icon icon-school text-primary mr-8"></view>
+        <text class="title-text text-bold text-base">破冰问答</text>
+      </view>
+      
+      <block wx:for="{{guest.questions}}" wx:key="id">
+        <view class="qna-card mb-16">
+          <view class="qna-question py-12 px-16">
+            <text class="question-text text-medium">{{item.content}}</text>
+          </view>
+          <view class="qna-answer-locked flex flex-center py-24">
+            <view class="icon icon-lock text-tertiary mr-8"></view>
+            <text class="lock-tip text-sm text-tertiary">回答已锁定，发送心动后解锁</text>
+          </view>
+        </view>
+      </block>
+    </view>
+ 
+    <!-- 兴趣标签与自我介绍 -->
+    <view class="extra-bio-section mb-40">
+      <view class="bio-tags flex flex-wrap gap-8 mb-16">
+        <view class="bio-pill text-xs text-secondary">温柔大方</view>
+        <view class="bio-pill text-xs text-secondary">喜欢猫咪</view>
+        <view class="bio-pill text-xs text-secondary">羽毛球爱好者</view>
+        <view class="bio-pill text-xs text-secondary">美食博主潜质</view>
+      </view>
+      <view class="bio-intro-text text-secondary text-sm leading-relaxed">
+        “希望能遇到一个三观一致，能一起去看日出日落的同频Ta。”
+      </view>
+    </view>
+  </view>
+ 
+  <!-- 底部固定操作栏 -->
+  <view class="detail-footer-bar safe-bottom flex gap-12">
+    <button class="btn btn-outline footer-like-btn flex flex-center flex-1" bindtap="onLikeTap">
+      <view class="icon icon-heart mr-4"></view>
+      <text class="btn-txt">点赞同频</text>
+    </button>
+    <button class="btn btn-primary footer-crush-btn flex flex-center flex-1-5" bindtap="onCrushTap">
+      <view class="icon icon-bolt mr-4" style="background-color: #FFFFFF;"></view>
+      <text class="btn-txt">发起心动</text>
+    </button>
+  </view>
+</view>
