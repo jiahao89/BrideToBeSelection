@@ -289,7 +289,7 @@ Page({
 
       try {
         const degreeLabel = this.data.degree === 'bachelor' ? '本科' : (this.data.degree === 'master' ? '硕士' : '博士')
-        const maritalLabel = this.data.maritalStatus === 'single' ? '未婚' : (this.data.maritalStatus === 'divorced' ? '离异' : '丧偶')
+        const maritalLabel = this.data.maritalStatus === 'single' ? '未婚' : (this.data.maritalStatus === 'divorced' ? '离异' : (this.data.maritalStatus === 'widowed' ? '丧偶' : '暂不披露'))
 
         await api.user.uploadVerification({
           realName: this.data.realName,

@@ -161,9 +161,9 @@
       <picker mode="selector" range="{{gradeOptions}}" bindchange="onGradeChange">
         <view class="input-container flex items-center">
           <view class="icon icon-calendar text-tertiary"></view>
-          <text class="form-input flex-1 ml-8 text-base {{grade ? 'text-primary-dark' : 'text-placeholder'}}" style="color: {{grade ? '#1E293B' : '#94A3B8'}};">
+          <view class="form-input flex-1 ml-8 text-base {{grade ? 'text-primary-dark' : 'text-placeholder'}}" style="color: {{grade ? '#1E293B' : '#94A3B8'}};">
             {{grade || '点击选择入学年份'}}
-          </text>
+          </view>
           <text class="input-arrow text-tertiary">❯</text>
         </view>
       </picker>
@@ -237,6 +237,13 @@
         >
           丧偶
         </view>
+        <view 
+          class="degree-chip text-center py-12 text-base {{maritalStatus === 'undisclosed' ? 'active' : ''}}" 
+          bindtap="onSelectMaritalStatus" 
+          data-value="undisclosed"
+        >
+          暂不披露
+        </view>
       </view>
     </view>
  
@@ -255,9 +262,9 @@
       <picker mode="date" value="{{birthday}}" end="2012-12-31" bindchange="onBirthdayChange">
         <view class="input-container flex items-center">
           <view class="icon icon-calendar text-tertiary"></view>
-          <text class="form-input flex-1 ml-8 text-base" style="color: {{birthday ? '#1E293B' : '#94A3B8'}};">
+          <view class="form-input flex-1 ml-8 text-base" style="color: {{birthday ? '#1E293B' : '#94A3B8'}};">
             {{birthday || '请选择生日（选填）'}}
-          </text>
+          </view>
           <text class="input-arrow text-tertiary">❯</text>
         </view>
       </picker>
@@ -269,9 +276,9 @@
       <picker mode="selector" range="{{constellationOptions}}" bindchange="onConstellationChange">
         <view class="input-container flex items-center">
           <view class="icon icon-crown text-tertiary"></view>
-          <text class="form-input flex-1 ml-8 text-base" style="color: {{constellation ? '#1E293B' : '#94A3B8'}};">
+          <view class="form-input flex-1 ml-8 text-base" style="color: {{constellation ? '#1E293B' : '#94A3B8'}};">
             {{constellation || '请选择或根据生日自动计算（选填）'}}
-          </text>
+          </view>
           <text class="input-arrow text-tertiary">❯</text>
         </view>
       </picker>

@@ -148,9 +148,19 @@
   font-weight: var(--font-weight-medium);
 }
 
+view.form-input {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
 .input-arrow {
   font-size: var(--font-size-sm);
   line-height: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 /* Radio Chips */
@@ -165,6 +175,11 @@
   color: var(--color-text-secondary);
   box-sizing: border-box;
   transition: all var(--transition-fast);
+  padding: 16rpx 0;
+}
+
+.degree-chips.flex-col .degree-chip {
+  padding: 24rpx 0;
 }
 
 .degree-chip.active {
