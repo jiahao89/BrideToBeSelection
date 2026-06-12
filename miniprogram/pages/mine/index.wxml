@@ -38,17 +38,17 @@
   <!-- 数据统计网格 (Stats Grid) -->
   <view class="stats-grid card flex mb-16">
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl text-primary">{{profile.followersCount || 24}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.followersCount || 24}}</text>
       <text class="stats-label text-xs text-secondary mt-4">关注我的</text>
     </view>
     <view class="stats-divider"></view>
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl text-primary">{{profile.matchCount || 3}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.matchCount || 3}}</text>
       <text class="stats-label text-xs text-secondary mt-4">互加微信</text>
     </view>
     <view class="stats-divider"></view>
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl text-primary">{{profile.likeCount || 88}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.likeCount || 88}}</text>
       <text class="stats-label text-xs text-secondary mt-4">同频点赞</text>
     </view>
   </view>
@@ -125,9 +125,7 @@
   <!-- 客服与咨询板块 (Help/Support Section) -->
   <view class="service-support-card flex flex-between items-center mb-40">
     <view class="support-left flex items-center">
-      <view class="support-icon-circle flex flex-center mr-12">
-        <view class="icon icon-support" style="width: 44rpx; height: 44rpx; color: #FF7A59;"></view>
-      </view>
+      <view class="icon icon-support mr-12" style="width: 48rpx; height: 48rpx; color: #FF7A59;"></view>
       <view class="support-content">
         <view class="support-title text-bold text-sm">联系客服</view>
         <view class="support-subtitle text-xs text-secondary mt-4">为您解答使用中的任何疑问</view>

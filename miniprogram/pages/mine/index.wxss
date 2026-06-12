@@ -96,6 +96,7 @@
 
 .stats-num {
   line-height: 1.1;
+  color: var(--color-text-primary);
 }
 
 .stats-label {
@@ -113,6 +114,7 @@
   padding: 0 !important;
   overflow: hidden;
   border-radius: var(--radius-xl) !important;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04) !important;
 }
 
 .menu-item {
@@ -151,7 +153,7 @@
 
 .item-divider {
   height: 1rpx;
-  background-color: var(--color-border-light);
+  background-color: #F8FAFC;
 }
 
 /* Avatar container and badges */
@@ -205,24 +207,14 @@
   box-shadow: 0 0 8rpx rgba(239, 68, 68, 0.4);
 }
 
-/* 客服与咨询板块 */
 .service-support-card {
   background: rgba(255, 122, 89, 0.05);
-  border: 1rpx solid rgba(255, 122, 89, 0.15);
   border-radius: 24rpx;
   padding: 32rpx;
   margin: 0 0 40rpx 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.support-icon-circle {
-  width: 80rpx;
-  height: 80rpx;
-  background-color: #FFFFFF;
-  border-radius: 50%;
-  box-shadow: 0 4rpx 12rpx rgba(255, 122, 89, 0.08);
 }
 
 .support-title {
