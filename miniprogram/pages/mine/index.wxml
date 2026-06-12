@@ -122,7 +122,7 @@
   <view class="service-support-card flex flex-between items-center mb-40">
     <view class="support-left flex items-center">
       <view class="support-icon-circle flex flex-center mr-12">
-        <view class="icon icon-users" style="width: 44rpx; height: 44rpx; color: #FF7A59;"></view>
+        <view class="icon icon-support" style="width: 44rpx; height: 44rpx; color: #FF7A59;"></view>
       </view>
       <view class="support-content">
         <view class="support-title text-bold text-sm">联系客服</view>
