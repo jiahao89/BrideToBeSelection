@@ -14,7 +14,7 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 function getCredentialsForOpenid(openid) {
   // 转换为小写并去除非法字符
   const cleanOpenid = openid.toLowerCase().replace(/[^a-z0-9_-]/g, '')
-  const email = `${cleanOpenid}@wx.liuchaosong.com`
+  const email = `${cleanOpenid}@gmail.com`
   // 使用确定的前缀与 openid 混合作为密码
   const password = `Wx_${openid}_Secure_2026`
   return { email, password }
