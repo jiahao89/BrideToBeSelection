@@ -16,9 +16,9 @@
         <view class="icon icon-badge-check" style="width: 24rpx; height: 24rpx; color: #FFFFFF;"></view>
       </view>
     </view>
-    <view class="user-meta ml-16 flex-1">
+    <view class="user-meta ml-40 flex-1">
       <view class="name-row flex items-center mb-8">
-        <text class="user-nickname text-bold text-xl">{{profile.nickname || '校友用户'}}</text>
+        <text class="user-nickname text-bold" style="font-size: 48rpx;">{{profile.nickname || '校友用户'}}</text>
         <text class="role-tag ml-8">{{profile.role === 'single' ? '单身校友' : '校友介绍人'}}</text>
       </view>
       <view class="school-row text-sm text-secondary flex items-center mb-8" wx:if="{{profile.school}}">
@@ -125,10 +125,10 @@
   <!-- 客服与咨询板块 (Help/Support Section) -->
   <view class="service-support-card flex flex-between items-center mb-40">
     <view class="support-left flex items-center">
-      <view class="icon icon-support mr-12" style="width: 48rpx; height: 48rpx; color: #FF7A59;"></view>
+      <view class="icon icon-support mr-24" style="width: 48rpx; height: 48rpx; color: #FF7A59;"></view>
       <view class="support-content">
         <view class="support-title text-bold text-sm">联系客服</view>
-        <view class="support-subtitle text-xs text-secondary mt-4">为您解答使用中的任何疑问</view>
+        <view class="support-subtitle text-secondary mt-4" style="font-size: 20rpx;">为您解答使用中的任何疑问</view>
       </view>
     </view>
     <button class="support-btn" bindtap="onContactService">咨询</button>

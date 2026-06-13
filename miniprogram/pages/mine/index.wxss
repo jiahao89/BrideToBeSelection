@@ -60,9 +60,9 @@
   font-size: 20rpx;
   color: var(--color-primary);
   background-color: var(--color-primary-light);
-  padding: 4rpx 12rpx;
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-medium);
+  padding: 4rpx 16rpx;
+  border-radius: 9999rpx;
+  font-weight: var(--font-weight-semibold);
 }
 
 .school-row {
@@ -159,17 +159,17 @@
 /* Avatar container and badges */
 .avatar-container {
   position: relative;
-  width: 128rpx;
-  height: 128rpx;
+  width: 160rpx;
+  height: 160rpx;
 }
 
 .verified-avatar-badge {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 4rpx;
+  right: 4rpx;
   background-color: #10B981;
-  width: 36rpx;
-  height: 36rpx;
+  width: 40rpx;
+  height: 40rpx;
   border-radius: 50%;
   border: 4rpx solid #FFFFFF;
   display: flex;
@@ -252,4 +252,12 @@
 
 .mr-8 {
   margin-right: var(--spacing-8);
+}
+
+.ml-40 {
+  margin-left: 40rpx;
+}
+
+.mr-24 {
+  margin-right: 24rpx;
 }
