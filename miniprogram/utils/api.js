@@ -3,6 +3,24 @@
  * 统一云函数调用入口，处理错误和 loading
  */
 
+// 并发请求计数器，解决 showLoading/hideLoading 配对问题
+let _loadingCount = 0
+
+function _showLoading(text) {
+  if (_loadingCount === 0) {
+    wx.showLoading({ title: text, mask: true })
+  }
+  _loadingCount++
+}
+
+function _hideLoading() {
+  _loadingCount--
+  if (_loadingCount <= 0) {
+    _loadingCount = 0
+    wx.hideLoading()
+  }
+}
+
 /**
  * 调用云函数
  * @param {string} name - 云函数名称
@@ -21,35 +39,54 @@ async function callCloud(name, data = {}, options = {}) {
   } = options
 
   if (showLoading) {
-    wx.showLoading({ title: loadingText, mask: true })
+    _showLoading(loadingText)
   }
 
   try {
+    // 打印请求参数方便调试
+    console.log(`[callCloud] → ${name}`, JSON.stringify(data))
+
     const res = await wx.cloud.callFunction({ name, data })
     const result = res.result
 
+    // 云函数返回了业务错误（success: false）
     if (!result || !result.success) {
       const errMsg = (result && result.message) || '操作失败，请重试'
+      console.error(`[callCloud] ✗ ${name} 业务失败:`, errMsg, result)
       if (showError) {
         wx.showToast({ title: errMsg, icon: 'none', duration: 2500 })
       }
       throw new Error(errMsg)
     }
 
+    console.log(`[callCloud] ✓ ${name} 成功`)
     return result.data
   } catch (err) {
-    // 区分云函数调用失败和业务逻辑失败
-    if (err.message && !err.message.includes('cloud.callFunction')) {
-      throw err
+    // 关键：始终打印原始错误，绝不让错误被静默吞掉
+    console.error(`[callCloud] ✗ ${name} 调用异常:`, err.message, err.errCode || '', err.stack || '')
+
+    // 提取真实错误信息，不再用 "网络异常" 掩盖
+    let errMsg = err.message || '操作失败，请重试'
+
+    // 对微信云开发常见的原始错误消息做友好化处理
+    if (errMsg.includes('function not found') || errMsg.includes('不存在')) {
+      errMsg = `云函数 ${name} 未部署，请在开发者工具中右键部署`
+    } else if (errMsg.includes('timeout') || errMsg.includes('超时')) {
+      errMsg = '请求超时，请稍后重试'
+    } else if (errMsg.includes('permission denied') || errMsg.includes('权限')) {
+      errMsg = '权限不足，请检查云开发配置'
+    } else if (errMsg.length > 30) {
+      // 错误信息过长时截断，toast 显示不下
+      errMsg = errMsg.substring(0, 30) + '...'
     }
-    const errMsg = '网络异常，请检查网络后重试'
+
     if (showError) {
-      wx.showToast({ title: errMsg, icon: 'none', duration: 2500 })
+      wx.showToast({ title: errMsg, icon: 'none', duration: 3000 })
     }
     throw new Error(errMsg)
   } finally {
     if (showLoading) {
-      wx.hideLoading()
+      _hideLoading()
     }
   }
 }
