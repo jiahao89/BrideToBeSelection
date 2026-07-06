@@ -3,7 +3,7 @@
  * 用于在微信云开发环境（Node.js）中安全、有鉴权地连接 Supabase。
  */
 
-// 微信云函数 Node.js 环境缺少 Headers/fetch 等 Web API
+// 微信云函数 Node.js 环境缺少 Headers/fetch/WebSocket 等 Web API
 // @supabase/supabase-js v2 依赖它们，需要 polyfill
 const crossFetch = require('cross-fetch')
 if (typeof globalThis.fetch === 'undefined') {
@@ -11,6 +11,22 @@ if (typeof globalThis.fetch === 'undefined') {
   globalThis.Headers = crossFetch.Headers
   globalThis.Request = crossFetch.Request
   globalThis.Response = crossFetch.Response
+}
+
+// @supabase/supabase-js 初始化时检测 WebSocket，即使 realtime 已禁用
+// 提供一个空的 WebSocket polyfill 以通过检测
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = class WebSocket {
+    constructor() { throw new Error('WebSocket not supported in this environment') }
+    close() {}
+    send() {}
+    addEventListener() {}
+    removeEventListener() {}
+  }
+  globalThis.WebSocket.CONNECTING = 0
+  globalThis.WebSocket.OPEN = 1
+  globalThis.WebSocket.CLOSING = 2
+  globalThis.WebSocket.CLOSED = 3
 }
 
 const { createClient } = require('@supabase/supabase-js')
@@ -47,6 +63,9 @@ async function getSupabaseClientForUser(openid) {
       persistSession: false,
       autoRefreshToken: false,
       detectSessionInUrl: false
+    },
+    realtime: {
+      enabled: false
     }
   })
 
@@ -102,6 +121,9 @@ async function getSupabaseClientForUser(openid) {
       persistSession: false,
       autoRefreshToken: false,
       detectSessionInUrl: false
+    },
+    realtime: {
+      enabled: false
     },
     global: {
       headers: {
