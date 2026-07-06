@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS public.xy_profiles (
 );
 
 -- 创建 updated_at 自动更新触发器
+DROP TRIGGER IF EXISTS update_xy_profiles_updated_at ON public.xy_profiles;
 CREATE TRIGGER update_xy_profiles_updated_at
     BEFORE UPDATE ON public.xy_profiles
     FOR EACH ROW
@@ -253,19 +254,21 @@ ALTER TABLE public.xy_audit_logs ENABLE ROW LEVEL SECURITY;
 -- 5.1 xy_profiles RLS 策略
 -- 允许读取条件：
 -- 1. 是本条记录拥有者
--- 2. 是已通过认证的普通用户（防盗取全库）
+-- 2. 目标是已认证用户（允许所有登录用户查看推荐卡片）
 -- 3. 是管理员（但学校管理员在接口层过滤，RLS 提供安全底线）
+DROP POLICY IF EXISTS select_xy_profiles ON public.xy_profiles;
 CREATE POLICY select_xy_profiles ON public.xy_profiles
     FOR SELECT TO authenticated
     USING (
         auth.uid() = user_id OR 
-        public.xy_is_verified_user() OR
+        status = 'verified' OR
         public.xy_is_admin()
     );
 
 -- 允许修改条件：
 -- 1. 用户本人只能修改自己的记录
 -- 2. 管理员可以修改记录
+DROP POLICY IF EXISTS update_xy_profiles ON public.xy_profiles;
 CREATE POLICY update_xy_profiles ON public.xy_profiles
     FOR UPDATE TO authenticated
     USING (auth.uid() = user_id OR public.xy_is_admin())
@@ -273,6 +276,7 @@ CREATE POLICY update_xy_profiles ON public.xy_profiles
 
 -- 5.2 xy_verifications RLS 策略
 -- 允许读取：本人可查看自己的审核单；管理员可查看本校或所有审核单
+DROP POLICY IF EXISTS select_xy_verifications ON public.xy_verifications;
 CREATE POLICY select_xy_verifications ON public.xy_verifications
     FOR SELECT TO authenticated
     USING (
@@ -281,17 +285,20 @@ CREATE POLICY select_xy_verifications ON public.xy_verifications
     );
 
 -- 允许用户本人插入新审核单
+DROP POLICY IF EXISTS insert_xy_verifications ON public.xy_verifications;
 CREATE POLICY insert_xy_verifications ON public.xy_verifications
     FOR INSERT TO authenticated
     WITH CHECK (auth.uid() = user_id);
 
 -- 允许管理员修改审核单（进行审批）
+DROP POLICY IF EXISTS update_xy_verifications ON public.xy_verifications;
 CREATE POLICY update_xy_verifications ON public.xy_verifications
     FOR UPDATE TO authenticated
     USING (public.xy_is_admin());
 
 -- 5.3 xy_heart_requests RLS 策略
 -- 允许读取：发送方、接收方可以看自己相关的申请；管理员可看
+DROP POLICY IF EXISTS select_xy_heart_requests ON public.xy_heart_requests;
 CREATE POLICY select_xy_heart_requests ON public.xy_heart_requests
     FOR SELECT TO authenticated
     USING (
@@ -301,11 +308,13 @@ CREATE POLICY select_xy_heart_requests ON public.xy_heart_requests
     );
 
 -- 允许发送方创建心动申请
+DROP POLICY IF EXISTS insert_xy_heart_requests ON public.xy_heart_requests;
 CREATE POLICY insert_xy_heart_requests ON public.xy_heart_requests
     FOR INSERT TO authenticated
     WITH CHECK (auth.uid() = sender_id);
 
 -- 允许接收方和管理员修改申请状态（接受/拒绝/审批）
+DROP POLICY IF EXISTS update_xy_heart_requests ON public.xy_heart_requests;
 CREATE POLICY update_xy_heart_requests ON public.xy_heart_requests
     FOR UPDATE TO authenticated
     USING (
@@ -315,49 +324,58 @@ CREATE POLICY update_xy_heart_requests ON public.xy_heart_requests
 
 -- 5.4 xy_activities RLS 策略
 -- 全员（包括未认证及未登录的游客）可读活动
+DROP POLICY IF EXISTS select_xy_activities ON public.xy_activities;
 CREATE POLICY select_xy_activities ON public.xy_activities
     FOR SELECT TO authenticated, anon
     USING (true);
 
 -- 仅管理员可增删改活动
+DROP POLICY IF EXISTS admin_modify_xy_activities ON public.xy_activities;
 CREATE POLICY admin_modify_xy_activities ON public.xy_activities
     FOR ALL TO authenticated
     USING (public.xy_is_admin());
 
 -- 5.5 xy_banners RLS 策略
 -- 全员可读
+DROP POLICY IF EXISTS select_xy_banners ON public.xy_banners;
 CREATE POLICY select_xy_banners ON public.xy_banners
     FOR SELECT TO authenticated, anon
     USING (true);
 
 -- 仅管理员可增删改 Banner
+DROP POLICY IF EXISTS admin_modify_xy_banners ON public.xy_banners;
 CREATE POLICY admin_modify_xy_banners ON public.xy_banners
     FOR ALL TO authenticated
     USING (public.xy_is_admin());
 
 -- 5.6 xy_reports RLS 策略
 -- 仅发起举报人及管理员可读
+DROP POLICY IF EXISTS select_xy_reports ON public.xy_reports;
 CREATE POLICY select_xy_reports ON public.xy_reports
     FOR SELECT TO authenticated
     USING (auth.uid() = reporter_id OR public.xy_is_admin());
 
 -- 允许用户创建举报
+DROP POLICY IF EXISTS insert_xy_reports ON public.xy_reports;
 CREATE POLICY insert_xy_reports ON public.xy_reports
     FOR INSERT TO authenticated
     WITH CHECK (auth.uid() = reporter_id);
 
 -- 仅管理员可以修改举报状态（处理举报）
+DROP POLICY IF EXISTS update_xy_reports ON public.xy_reports;
 CREATE POLICY update_xy_reports ON public.xy_reports
     FOR UPDATE TO authenticated
     USING (public.xy_is_admin());
 
 -- 5.7 xy_audit_logs RLS 策略
 -- 仅管理员可读
+DROP POLICY IF EXISTS select_xy_audit_logs ON public.xy_audit_logs;
 CREATE POLICY select_xy_audit_logs ON public.xy_audit_logs
     FOR SELECT TO authenticated
     USING (public.xy_is_admin());
 
 -- 仅允许管理员写入审计日志
+DROP POLICY IF EXISTS insert_xy_audit_logs ON public.xy_audit_logs;
 CREATE POLICY insert_xy_audit_logs ON public.xy_audit_logs
     FOR INSERT TO authenticated
     WITH CHECK (public.xy_is_admin());
@@ -446,6 +464,7 @@ ALTER TABLE public.xy_likes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.xy_messages ENABLE ROW LEVEL SECURITY;
 
 -- xy_likes 读写策略
+DROP POLICY IF EXISTS select_xy_likes ON public.xy_likes;
 CREATE POLICY select_xy_likes ON public.xy_likes
     FOR SELECT TO authenticated
     USING (
@@ -454,11 +473,13 @@ CREATE POLICY select_xy_likes ON public.xy_likes
         public.xy_is_admin()
     );
 
+DROP POLICY IF EXISTS insert_xy_likes ON public.xy_likes;
 CREATE POLICY insert_xy_likes ON public.xy_likes
     FOR INSERT TO authenticated
     WITH CHECK (auth.uid() = sender_id);
 
 -- xy_messages 读写策略
+DROP POLICY IF EXISTS select_xy_messages ON public.xy_messages;
 CREATE POLICY select_xy_messages ON public.xy_messages
     FOR SELECT TO authenticated
     USING (
@@ -466,6 +487,7 @@ CREATE POLICY select_xy_messages ON public.xy_messages
         public.xy_is_admin()
     );
 
+DROP POLICY IF EXISTS update_xy_messages ON public.xy_messages;
 CREATE POLICY update_xy_messages ON public.xy_messages
     FOR UPDATE TO authenticated
     USING (auth.uid() = receiver_id)

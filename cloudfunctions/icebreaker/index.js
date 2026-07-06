@@ -10,8 +10,8 @@
 const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
-const { getSupabaseClientForUser } = require('../common/supabase')
-const { success, fail, getOpenId } = require('../common/utils')
+const { getSupabaseClientForUser } = require('./common/supabase')
+const { success, fail, getOpenId } = require('./common/utils')
 
 exports.main = async (event, context) => {
   const { action } = event

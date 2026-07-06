@@ -10,8 +10,8 @@
 const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
-const { getSupabaseClientForUser } = require('../common/supabase')
-const { success, fail, getOpenId } = require('../common/utils')
+const { getSupabaseClientForUser } = require('./common/supabase')
+const { success, fail, getOpenId } = require('./common/utils')
 
 exports.main = async (event, context) => {
   const { action } = event
@@ -119,20 +119,17 @@ async function handleSend(openid, event) {
         return fail('点赞失败')
       }
 
-      // 增加对方 profiles 中的被赞数 (likes_count)
-      const { data: targetProfile } = await client
-        .from('xy_profiles')
-        .select('likes_count')
-        .eq('user_id', targetId)
-        .single()
-
-      if (targetProfile) {
-        await client
-          .from('xy_profiles')
-          .update({
-            likes_count: (targetProfile.likes_count || 0) + 1
-          })
-          .eq('user_id', targetId)
+      // 更新对方 likes_count (通过 RPC 原子自增)
+      // 需在 Supabase 执行以下 SQL 创建函数：
+      // CREATE OR REPLACE FUNCTION increment_likes_count(p_user_id UUID)
+      // RETURNS VOID AS $$
+      //   UPDATE xy_profiles SET likes_count = likes_count + 1 WHERE user_id = p_user_id;
+      // $$ LANGUAGE SQL SECURITY DEFINER;
+      try {
+        await client.rpc('increment_likes_count', { p_user_id: targetId })
+      } catch (rpcErr) {
+        // RPC 函数尚未部署时降级：不影响点赞成功，likes_count 下次刷新时从 DB 聚合修正
+        console.warn('increment_likes_count RPC 调用失败，likes_count 未同步更新:', rpcErr.message)
       }
 
       return success(null, '欣赏成功！')

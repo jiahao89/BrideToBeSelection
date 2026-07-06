@@ -60,12 +60,16 @@
   >
     <view class="grid-container">
       <block wx:for="{{list}}" wx:key="_id" wx:for-index="idx">
-        <view class="guest-card" bindtap="onCardTap" data-id="{{item._id}}">
-          <!-- 统一设置图片的高宽比为 1:1 正方形，与 Stitch 完全对齐 -->
+        <view class="guest-card {{item.is_locked ? 'locked' : ''}}" bindtap="onCardTap" data-id="{{item._id}}" data-locked="{{item.is_locked}}">
           <view class="image-wrap aspect-square">
-            <image class="avatar-img" src="{{item.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+            <image class="avatar-img {{item.is_locked ? 'avatar-blur' : ''}}" src="{{item.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+            <!-- 锁定遮罩 (未认证用户只能看前3张，第4张锁定) -->
+            <view class="lock-overlay" wx:if="{{item.is_locked}}">
+              <view class="icon icon-lock lock-icon"></view>
+              <text class="lock-text">认证后解锁</text>
+            </view>
             <!-- 右上角悬浮爱心按钮 -->
-            <view class="heart-float flex flex-center" catchtap="onLikeToggle" data-id="{{item._id}}">
+            <view class="heart-float flex flex-center" catchtap="onLikeToggle" data-id="{{item._id}}" wx:if="{{!item.is_locked}}">
               <view class="icon icon-heart heart-icon {{item.isLiked ? 'liked' : ''}}"></view>
             </view>
           </view>
@@ -81,8 +85,16 @@
       </block>
     </view>
 
-    <!-- 空状态 -->
-    <view wx:if="{{list.length === 0 && !loading}}" class="empty-state">
+    <!-- 网络错误态 -->
+    <view wx:if="{{fetchError}}" class="empty-state error-state">
+      <text class="empty-state-text">加载失败，请检查网络</text>
+      <view class="retry-btn" bindtap="fetchData">
+        <text class="retry-btn-text">重新加载</text>
+      </view>
+    </view>
+
+    <!-- 空状态 (数据正常但列表为空) -->
+    <view wx:elif="{{list.length === 0 && !loading}}" class="empty-state">
       <text class="empty-state-text">暂无推荐，稍后再来看看吧</text>
     </view>
   </scroll-view>

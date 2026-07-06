@@ -278,9 +278,50 @@
   line-height: 1.2;
 }
 
+/* Locked Card */
+.guest-card.locked {
+  opacity: 0.85;
+}
+
+.guest-card.locked:active {
+  transform: none;
+}
+
+.avatar-blur {
+  filter: blur(16rpx);
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.lock-icon {
+  width: 48rpx;
+  height: 48rpx;
+  color: #FFFFFF;
+}
+
+.lock-text {
+  color: #FFFFFF;
+  font-size: 24rpx;
+  margin-top: 12rpx;
+  font-weight: 500;
+}
+
 /* Empty State */
 .empty-state {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 100rpx 0;
@@ -289,6 +330,26 @@
 .empty-state-text {
   color: #5A514E;
   font-size: 28rpx;
+}
+
+.error-state {
+  gap: 24rpx;
+}
+
+.retry-btn {
+  background-color: #FF7A59;
+  border-radius: 9999rpx;
+  padding: 16rpx 48rpx;
+}
+
+.retry-btn:active {
+  opacity: 0.8;
+}
+
+.retry-btn-text {
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
 }
 
 /* 筛选弹出面板 (Filter Popup Bottom Sheet) */

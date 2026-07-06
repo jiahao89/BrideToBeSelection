@@ -7,61 +7,61 @@ App({
       return
     }
     wx.cloud.init({
-      env: 'liuchaosong-prod', // 替换为实际环境ID
+      env: 'cloudbase-d4gu70bs98392f16e',
       traceUser: true,
     })
 
-    // 计算设备及胶囊安全区信息，用于还原 Stitch 原型中的自定义 TopAppBar 头部
+    // 计算设备及胶囊安全区信息，用于自定义导航栏
     try {
       const sysInfo = wx.getSystemInfoSync()
       const capsule = wx.getMenuButtonBoundingClientRect()
       const statusBarHeight = sysInfo.statusBarHeight || 20
-      // 动态计算导航栏高度使得文本和胶囊完美在Y轴居中
       const navBarHeight = (capsule.top - statusBarHeight) * 2 + capsule.height
-      
+
       this.globalData.navBarHeight = navBarHeight
       this.globalData.statusBarHeight = statusBarHeight
       this.globalData.navBarTotalHeight = statusBarHeight + navBarHeight
     } catch (e) {
       console.error('计算自定义导航栏高度出错:', e)
-      // 容错兜底值
       this.globalData.navBarHeight = 44
       this.globalData.statusBarHeight = 20
       this.globalData.navBarTotalHeight = 64
     }
 
-    // 检查登录状态
-    this.checkLoginStatus()
+    // 登录流程：通过 Promise 暴露给页面，页面可通过 await getApp().waitForLogin() 等待
+    this._loginReady = this.checkLoginStatus()
   },
 
   globalData: {
-    userInfo: null,       // 微信用户信息
-    userId: null,         // 系统用户ID
-    activeRole: null,     // 当前激活角色：self/parent/matchmaker/organizer/volunteer
-    roles: [],            // 用户拥有的所有角色
-    isVerified: {         // 认证状态
+    userInfo: null,
+    userId: null,
+    activeRole: null,
+    roles: [],
+    isVerified: {
       identity: false,
       education: false,
       work: false,
     },
-    profileCompleteness: 0, // 资料完整度
-    isMember: false,        // 是否为会员
+    profileCompleteness: 0,
+    isMember: false,
   },
 
   /**
    * 检查登录状态，恢复会话
+   * 如果本地有 auth_token 则校验云端会话；否则尝试静默登录
    */
   async checkLoginStatus() {
     try {
-      const token = wx.getStorageSync('auth_token')
-      if (!token) return
+      const hasLoggedIn = wx.getStorageSync('has_logged_in')
+      if (!hasLoggedIn) return
 
+      // 有登录标记，校验云端会话是否仍有效
       const res = await wx.cloud.callFunction({
         name: 'user',
         data: { action: 'checkSession' },
       })
 
-      if (res.result && res.result.success) {
+      if (res.result && res.result.success && res.result.data && res.result.data.user) {
         const { user } = res.result.data
         this.globalData.userId = user._id
         this.globalData.activeRole = user.active_role
@@ -69,11 +69,44 @@ App({
         this.globalData.isVerified = user.verification_status || {}
         this.globalData.profileCompleteness = user.profile_completeness || 0
         this.globalData.isMember = user.is_member || false
+      } else {
+        // 会话失效，尝试静默重新登录
+        await this._autoLogin()
       }
     } catch (err) {
-      console.error('会话恢复失败:', err)
-      wx.removeStorageSync('auth_token')
+      console.error('会话恢复失败，尝试静默登录:', err)
+      try {
+        await this._autoLogin()
+      } catch (e) {
+        console.error('静默登录也失败:', e)
+      }
     }
+  },
+
+  /**
+   * 静默登录：仅获取 openid 并建立 Supabase 会话，不弹 UI
+   */
+  async _autoLogin() {
+    const result = await this.wxLogin()
+    if (result && result.success) {
+      wx.setStorageSync('has_logged_in', true)
+      if (result.data && result.data.user) {
+        const { user } = result.data
+        this.globalData.userId = user._id
+        this.globalData.activeRole = user.active_role
+        this.globalData.roles = user.roles
+        this.globalData.isVerified = user.verification_status || {}
+        this.globalData.profileCompleteness = user.profile_completeness || 0
+        this.globalData.isMember = user.is_member || false
+      }
+    }
+  },
+
+  /**
+   * 页面等待登录完成，用法：await getApp().waitForLogin()
+   */
+  waitForLogin() {
+    return this._loginReady || Promise.resolve()
   },
 
   /**
@@ -91,7 +124,11 @@ App({
                 code: loginRes.code,
               },
             })
-            resolve(result.result)
+            const res = result.result
+            if (res && res.success) {
+              wx.setStorageSync('has_logged_in', true)
+            }
+            resolve(res)
           } catch (err) {
             reject(err)
           }
