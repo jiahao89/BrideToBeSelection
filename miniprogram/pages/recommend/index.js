@@ -73,9 +73,14 @@ Page({
   },
 
   async fetchData() {
-    // 等待 app.js 登录流程完成，确保 globalData.userId 已就绪
     const app = getApp()
     await app.waitForLogin()
+
+    // 游客模式不发请求，显示空态
+    if (app.globalData.isGuest) {
+      this.setData({ allList: [], list: [] })
+      return
+    }
 
     this.setData({ loading: true, fetchError: false })
     try {
@@ -126,6 +131,8 @@ Page({
   },
 
   async onLikeToggle(e) {
+    // 游客拦截
+    if (!getApp().checkGuest('点赞')) return
     // 防抖：一次只能处理一个点赞请求
     if (this._likeInProgress) return
     this._likeInProgress = true

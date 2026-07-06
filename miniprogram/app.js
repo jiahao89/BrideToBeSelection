@@ -110,6 +110,30 @@ App({
   },
 
   /**
+   * 游客模式守卫：检查当前用户是否为游客
+   * 如果是游客，弹窗引导登录并返回 false；否则返回 true
+   * @param {string} actionDesc - 操作描述，如"点赞"、"报名活动"
+   * @returns {boolean}
+   */
+  checkGuest(actionDesc) {
+    if (this.globalData.isGuest) {
+      wx.showModal({
+        title: '需要登录',
+        content: `${actionDesc || '此功能'}需要先登录账号`,
+        confirmText: '去登录',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/login/index' })
+          }
+        }
+      })
+      return false
+    }
+    return true
+  },
+
+  /**
    * 微信登录并获取 openid
    */
   async wxLogin() {

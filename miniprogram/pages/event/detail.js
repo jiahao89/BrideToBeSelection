@@ -97,7 +97,9 @@ Page({
   },
 
   onRegister() {
-    // 1. 拦截未认证用户
+    // 游客拦截
+    if (!getApp().checkGuest('报名活动')) return
+    // 拦截未认证用户
     if (!this.data.userVerified) {
       this.setData({ showVerifyModal: true })
       return

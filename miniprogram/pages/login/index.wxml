@@ -10,11 +10,10 @@
 
   <!-- 登录按钮区域 -->
   <view class="login-actions">
-    <!-- 微信快捷登录 -->
+    <!-- 微信一键登录（主按钮） -->
     <button
       class="btn-wechat"
-      open-type="getPhoneNumber"
-      bindgetphonenumber="onGetPhoneNumber"
+      bind:tap="onWechatLogin"
       loading="{{loading}}"
       disabled="{{loading}}"
     >
@@ -22,14 +21,14 @@
       <text class="wechat-text">微信一键登录</text>
     </button>
 
-    <!-- 手机号/验证码登录 -->
+    <!-- 手机号验证码登录（次按钮，暂不支持） -->
     <button class="btn-phone" bind:tap="onPhoneLogin">
       <text class="phone-text">手机号登录/注册</text>
     </button>
 
-    <!-- 跳过登录/游客体验 -->
-    <view class="skip-action" bind:tap="onSkipLogin">
-      <text class="skip-text">暂不登录，游客体验</text>
+    <!-- 游客浏览 -->
+    <view class="skip-action" bind:tap="onGuestLogin">
+      <text class="skip-text">暂不登录，先逛逛</text>
     </view>
   </view>
 

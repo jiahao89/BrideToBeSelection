@@ -116,6 +116,7 @@ Page({
   },
 
   async onLikeTap() {
+    if (!getApp().checkGuest('点赞')) return
     try {
       await api.like.send(this.data.id)
       wx.showToast({ title: '点赞同频成功', icon: 'success' })
@@ -125,6 +126,7 @@ Page({
   },
 
   onCrushTap() {
+    if (!getApp().checkGuest('发起心动')) return
     const name = this.data.guest ? this.data.guest.nickname : '对方'
     nav.navigateTo(`/pages/icebreaker/answer?id=${this.data.id}&name=${encodeURIComponent(name)}`)
   }

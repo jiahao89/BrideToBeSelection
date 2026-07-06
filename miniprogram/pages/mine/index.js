@@ -48,6 +48,7 @@ Page({
   },
 
   onSettingsHeart() {
+    if (!getApp().checkGuest('心动设置')) return
     wx.showToast({ title: '我的心动设置功能开发中', icon: 'none' })
   },
 
@@ -58,14 +59,17 @@ Page({
   },
 
   onGoToVerification() {
+    if (!getApp().checkGuest('认证')) return
     nav.navigateTo('/pages/verification/index')
   },
 
   onMyCrushList() {
+    if (!getApp().checkGuest('查看心动')) return
     wx.showToast({ title: '我发起的心动开发中', icon: 'none' })
   },
 
   onMyIcebreakers() {
+    if (!getApp().checkGuest('查看破冰问题')) return
     wx.showToast({ title: '我的破冰问题开发中', icon: 'none' })
   },
 

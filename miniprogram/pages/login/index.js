@@ -1,4 +1,3 @@
-const { api } = require('../../utils/api')
 const { nav } = require('../../utils/util')
 
 Page({
@@ -8,88 +7,75 @@ Page({
   },
 
   onLoad(options) {
-    // 如果有邀请码参数，保存
     if (options.inviteCode) {
       wx.setStorageSync('pending_invite_code', options.inviteCode)
     }
 
-    // 检查是否已登录
+    // 已登录则直接跳转
     const app = getApp()
     if (app.globalData.userId) {
       this._navigateAfterLogin()
     }
   },
 
-  /**
-   * 勾选/取消协议
-   */
   onToggleAgreement() {
     this.setData({ agreed: !this.data.agreed })
   },
 
   /**
-   * 微信授权登录
+   * 确保已勾选协议，未勾选则弹窗提示
    */
-  async onGetPhoneNumber(e) {
-    if (e.detail.errMsg !== 'getPhoneNumber:ok') {
-      wx.showToast({ title: '需要手机号授权才能登录', icon: 'none' })
-      return
-    }
-
-    if (!this.data.agreed) {
-      wx.showModal({
-        title: '用户协议与隐私政策',
-        content: '您需要同意《用户服务协议》和《隐私政策》后才能继续登录',
-        confirmText: '同意',
-        cancelText: '取消',
-        success: async (res) => {
-          if (res.confirm) {
-            this.setData({ agreed: true })
-            await this._doWechatLogin()
-          }
+  _ensureAgreed() {
+    if (this.data.agreed) return true
+    wx.showModal({
+      title: '用户协议与隐私政策',
+      content: '您需要同意《用户服务协议》和《隐私政策》后才能继续',
+      confirmText: '同意',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          this.setData({ agreed: true })
+          // 用户同意后不自动继续，需要再点一次按钮
         }
-      })
-      return
-    }
-
-    await this._doWechatLogin()
+      }
+    })
+    return false
   },
 
   /**
-   * 执行微信登录逻辑
+   * 微信一键登录
+   * 调用 wx.login 获取 code → 云函数建立 Supabase 会话
    */
-  async _doWechatLogin() {
-    this.setData({ loading: true })
+  async onWechatLogin() {
+    if (!this._ensureAgreed()) return
 
+    this.setData({ loading: true })
     try {
       const app = getApp()
       const loginResult = await app.wxLogin()
 
-      if (!loginResult.success) {
-        wx.showToast({ title: loginResult.message || '登录失败', icon: 'none' })
+      if (!loginResult || !loginResult.success) {
+        wx.showToast({ title: (loginResult && loginResult.message) || '登录失败，请重试', icon: 'none' })
         return
       }
 
       const { data } = loginResult
 
       if (data.needRegister) {
-        // 新用户，跳转角色选择
         nav.redirect('/pages/role-select/index')
       } else {
-        // 已注册用户
         app.globalData.userId = data.user._id
         app.globalData.activeRole = data.user.active_role
         app.globalData.roles = data.user.roles
         app.globalData.isVerified = data.user.verification_status || {}
         app.globalData.profileCompleteness = data.user.profile_completeness || 0
         app.globalData.isMember = data.user.is_member || false
-
-        wx.setStorageSync('auth_token', data.user._id)
+        app.globalData.isGuest = false
 
         this._navigateAfterLogin()
       }
     } catch (err) {
-      console.error('登录异常:', err)
+      console.error('微信登录异常:', err)
       wx.showToast({ title: '登录失败，请重试', icon: 'none' })
     } finally {
       this.setData({ loading: false })
@@ -97,89 +83,35 @@ Page({
   },
 
   /**
-   * 手机号登录/注册 (引导进入完整的注册流程和页面)
+   * 手机号登录（暂不支持，需要后端短信服务商）
    */
   onPhoneLogin() {
-    if (!this.data.agreed) {
-      wx.showModal({
-        title: '用户协议与隐私政策',
-        content: '您需要同意《用户服务协议》和《隐私政策》后才能继续登录',
-        confirmText: '同意',
-        cancelText: '取消',
-        success: (res) => {
-          if (res.confirm) {
-            this.setData({ agreed: true })
-            this._doPhoneLogin()
-          }
-        }
-      })
-      return
-    }
-
-    this._doPhoneLogin()
-  },
-
-  /**
-   * 执行手机号登录逻辑
-   */
-  _doPhoneLogin() {
-    const app = getApp()
-    // 初始化一个全新的未注册/未认证用户状态，以便进入注册流程
-    app.globalData.userId = 'mock_new_user_id'
-    app.globalData.activeRole = ''
-    app.globalData.roles = []
-    app.globalData.isVerified = {
-      identity: false,
-      education: false,
-      work: false
-    }
-    app.globalData.profileCompleteness = 0
-    app.globalData.isMember = false
-
-    wx.setStorageSync('auth_token', 'mock_new_user_token')
-
-    wx.showToast({
-      title: '验证码发送成功',
-      icon: 'success',
-      duration: 1000
+    wx.showModal({
+      title: '手机号登录',
+      content: '手机号验证码登录功能即将上线，目前请使用微信一键登录。',
+      showCancel: false,
+      confirmText: '我知道了'
     })
-
-    setTimeout(() => {
-      // 进入注册角色选择流程
-      nav.navigateTo('/pages/role-select/index')
-    }, 1000)
   },
 
   /**
-   * 免登跳过 / 游客体验逻辑
+   * 游客体验：仅浏览权限，操作时引导登录
    */
-  onSkipLogin() {
+  onGuestLogin() {
     const app = getApp()
-    
-    // 游客模式：仅浏览权限，不可点赞/心动/报名
     app.globalData.userId = null
     app.globalData.activeRole = ''
     app.globalData.roles = []
-    app.globalData.isVerified = {
-      identity: false,
-      education: false,
-      work: false
-    }
+    app.globalData.isVerified = { identity: false, education: false, work: false }
     app.globalData.profileCompleteness = 0
     app.globalData.isMember = false
     app.globalData.isGuest = true
 
-    wx.showToast({
-      title: '已进入游客浏览模式',
-      icon: 'none',
-      duration: 1200
-    })
+    wx.showToast({ title: '游客模式，部分功能需登录', icon: 'none', duration: 1500 })
 
     setTimeout(() => {
-      wx.switchTab({
-        url: '/pages/recommend/index'
-      })
-    }, 1200)
+      wx.switchTab({ url: '/pages/recommend/index' })
+    }, 1000)
   },
 
   onViewPrivacy() {
@@ -200,18 +132,14 @@ Page({
     })
   },
 
-  /**
-   * 登录后导航
-   */
   _navigateAfterLogin() {
     const app = getApp()
     const completeness = app.globalData.profileCompleteness || 0
+    app.globalData.isGuest = false
 
     if (completeness < 50) {
-      // 资料不完整，引导去完善（原代码跳转不存在的 profile-edit 页，现修正为 verification 认证页）
       nav.redirect('/pages/verification/index?from=login')
     } else {
-      // 直接进入推荐页
       nav.switchTab('/pages/recommend/index')
     }
   },
