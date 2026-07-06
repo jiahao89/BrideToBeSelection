@@ -19,27 +19,27 @@ Page({
   async fetchData() {
     this.setData({ loading: true })
     try {
+      await getApp().waitForLogin()
       const data = await api.user.getProfile()
-      this.setData({ profile: data })
+      // API 返回 { profile: {...}, verifications: [...], endorsements: [] }
+      const profile = (data && data.profile) ? data.profile : (data || {})
+      this.setData({ profile })
     } catch (err) {
       console.error('获取个人资料失败:', err)
-      // 模拟测试数据 (符合 Stitch 设计图)
       this.setData({
         profile: {
-          nickname: '陈佳丽',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCasY8xPdX4ntXdqUCr28WIF-zJnJh6BVx8KsZYlOgP_obIwVr3K9MiOzIbpi5T8Yjw_QWuIPBssUyjeFK6bMD0YT4TlKz2q_zto5Ni9C9Uw6hA2rxiE9aKBft9ktKRq3qE1WROXEmPMrelTlZl99zJSSdmXHGPTbhl81vW6DyVW-2zKQqRgKfAeNWM9pnZpI_Uk-LflkJ_7QV7zp0qiuI3qd9vR3jVtYcb83o3miz99ZChp9mvUjG0hoyLl_kdUg_tJ21jU4E7Ke8',
-          school: '江南大学',
-          degree: '硕士',
-          gradYear: '2022',
-          role: 'single', // 'single' 单身校友 / 'matchmaker' 介绍人
+          nickname: '校友用户',
+          avatar: '',
+          school: '',
+          role: 'single',
           rejected: false,
-          idVerified: true,
-          eduVerified: true,
+          idVerified: false,
+          eduVerified: false,
           workVerified: false,
-          followersCount: 24, // 关注我的
-          matchCount: 3,      // 互加微信
-          likeCount: 88,      // 同频点赞
-          hasUnreadAnswers: true // 收到的破冰回答红点
+          followersCount: 0,
+          matchCount: 0,
+          likeCount: 0,
+          hasUnreadAnswers: false
         }
       })
     } finally {

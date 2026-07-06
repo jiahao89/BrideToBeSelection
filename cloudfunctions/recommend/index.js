@@ -69,7 +69,7 @@ async function handleDailyRecommend(openid, event) {
     let query = client
       .from('xy_profiles')
       .select('user_id, name, phone, gender, birth_year, zodiac, height, school, college, major, company, job_title, marital_status, introduction, avatar_url, views_count, likes_count')
-      .eq('role', 'single_dog')
+      .eq('role', 'single')
       .eq('status', 'verified')
       .neq('user_id', user.id)
 

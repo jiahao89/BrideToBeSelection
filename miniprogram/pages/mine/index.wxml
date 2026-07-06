@@ -38,17 +38,17 @@
   <!-- 数据统计网格 (Stats Grid) -->
   <view class="stats-grid card flex mb-16">
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl">{{profile.followersCount || 24}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.followersCount || 0}}</text>
       <text class="stats-label text-xs text-secondary mt-4">关注我的</text>
     </view>
     <view class="stats-divider"></view>
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl">{{profile.matchCount || 3}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.matchCount || 0}}</text>
       <text class="stats-label text-xs text-secondary mt-4">互加微信</text>
     </view>
     <view class="stats-divider"></view>
     <view class="stats-item flex-1 flex flex-col items-center">
-      <text class="stats-num text-bold text-xl">{{profile.likeCount || 88}}</text>
+      <text class="stats-num text-bold text-xl">{{profile.likeCount || 0}}</text>
       <text class="stats-label text-xs text-secondary mt-4">同频点赞</text>
     </view>
   </view>

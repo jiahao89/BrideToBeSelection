@@ -21,6 +21,7 @@ Page({
   async fetchData() {
     this.setData({ loading: true })
     try {
+      await getApp().waitForLogin()
       const data = await api.like.getReceived()
       const crushList = data.filter(item => item.answers || item.stage)
       const likeList = data.filter(item => !item.answers && !item.stage)

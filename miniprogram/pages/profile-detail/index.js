@@ -18,7 +18,9 @@ Page({
     this.setData({ loading: true })
     try {
       const data = await api.user.getProfile(id)
-      this.setData({ guest: this.formatGuest(data) })
+      // API 返回 { profile: {...}, verifications: [...], endorsements: [] }
+      const profile = (data && data.profile) ? data.profile : (data || {})
+      this.setData({ guest: this.formatGuest(profile) })
     } catch (err) {
       console.error('获取详情失败:', err)
       

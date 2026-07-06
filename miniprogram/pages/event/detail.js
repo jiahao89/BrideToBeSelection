@@ -120,14 +120,8 @@ Page({
       this.setData({ event: updatedEvent })
     } catch (err) {
       console.error('报名失败:', err)
-      // 降级兜底：模拟成功
       wx.hideLoading()
-      wx.showToast({
-        title: '报名预约成功(测试)',
-        icon: 'success'
-      })
-      const updatedEvent = { ...this.data.event, registered: true, attendingCount: (this.data.event.attendingCount || 0) + 1 }
-      this.setData({ event: updatedEvent })
+      wx.showToast({ title: '报名失败，请稍后重试', icon: 'none' })
     }
   },
 

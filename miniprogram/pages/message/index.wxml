@@ -34,7 +34,7 @@
           <!-- 卡片头部点击可折叠/展开 -->
           <view class="card-header flex flex-between items-center px-16 py-16" bindtap="onToggleExpand" data-id="{{item._id}}">
             <view class="header-left flex items-center">
-              <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZf5v0G4zeqKBiVIfV_-GFQa-PtD5VjU6yFhl7Yrh3rfHqyGhLJ0lvFOn7-zq3NGNVC9iwfGfObnrnZZmMC4rDI22ohJDb7YU1N-IreGtDa-Ts1hsGLu_k3swEU3uOn9Rau8TZGN0jgLi0TeqZeXYIMausC1pg9Dpp33wlh-8_jRIjXL-vlMrqkJOTxvH3PS44AULt2HIzY2pwizbOG8t5ewCWi6RKi_FtLCGsVWggu785gl5NbLCsXe-O5UmXunQcH4K9ZpxnOgc'}}" mode="aspectFill" />
+              <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
               <view class="sender-info">
                 <view class="name-row flex items-center">
                   <text class="sender-name text-bold text-base">{{item.nickname}}</text>
@@ -103,7 +103,7 @@
       <block wx:for="{{likeList}}" wx:key="_id">
         <view class="like-item-card card flex flex-between items-center py-16 px-20">
           <view class="item-left flex items-center">
-            <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBj1iILsmZ8lMcnuqGX4OeZL8ulIC7dajUDqvUyLcV_R0I9t4GYgrnEQpeKzIH4zdrXCV-28cEHMr1NsbK4Z052J-_s1HqhmT_wwQSnPgZT-3CVxBU3Fnyissl6SgcbuCiJwAEG3dFhEhGln0XuUpLvCsOrDEfaggdu-Ia-y5igmqVp7WqqBC13zVNvHjQyYx0ZU3fLiwNMDcii4erFfuzG8GK9x0xOpwLKTX70GBrIxqiJMT5EBMo9siGmz1N45qeQ2t2ZVuNmu6Y'}}" mode="aspectFill" />
+            <image class="sender-avatar avatar avatar-md mr-12" src="{{item.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
             <view class="like-info">
               <view class="name-row flex items-center mb-4">
                 <text class="like-name text-bold text-base">{{item.nickname}}</text>

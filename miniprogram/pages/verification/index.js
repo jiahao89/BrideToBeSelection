@@ -324,17 +324,8 @@ Page({
         app.globalData.profileCompleteness = 95
         app.globalData.activeRole = app.globalData.activeRole || 'single'
         
-        const pages = getCurrentPages()
-        const mePage = pages.find(p => p.route === 'pages/mine/index')
-        if (mePage && mePage.data.profile) {
-          mePage.setData({
-            'profile.rejected': false,
-            'profile.idVerified': true,
-            'profile.eduVerified': true,
-            'profile.school': this.data.school,
-            'profile.degree': degreeLabel
-          })
-        }
+        // 标记认证状态变更，mine 页面 onShow 时会重新拉取数据
+        wx.setStorageSync('verification_updated', true)
 
         setTimeout(() => {
           wx.switchTab({ url: '/pages/recommend/index' })
@@ -342,26 +333,7 @@ Page({
 
       } catch (err) {
         console.error('提交认证失败:', err)
-        
-        // 降级测试成功
-        wx.showToast({
-          title: '认证提交成功(测试)',
-          icon: 'success',
-          duration: 2000
-        })
-        
-        const app = getApp()
-        app.globalData.isVerified = {
-          identity: true,
-          education: true,
-          work: true
-        }
-        app.globalData.profileCompleteness = 95
-        app.globalData.activeRole = app.globalData.activeRole || 'single'
-        
-        setTimeout(() => {
-          wx.switchTab({ url: '/pages/recommend/index' })
-        }, 2000)
+        wx.showToast({ title: '认证提交失败，请稍后重试', icon: 'none' })
       } finally {
         this.setData({ submitting: false })
       }

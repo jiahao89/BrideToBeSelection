@@ -156,29 +156,26 @@ Page({
   onSkipLogin() {
     const app = getApp()
     
-    // 设置模拟的完整测试数据，避免在后续页面中因为数据不全或权限被拦截而报错
-    app.globalData.userId = 'mock_visitor_user_id'
-    app.globalData.activeRole = 'self'
-    app.globalData.roles = ['self']
+    // 游客模式：仅浏览权限，不可点赞/心动/报名
+    app.globalData.userId = null
+    app.globalData.activeRole = ''
+    app.globalData.roles = []
     app.globalData.isVerified = {
-      identity: true,
-      education: true,
-      work: true
+      identity: false,
+      education: false,
+      work: false
     }
-    app.globalData.profileCompleteness = 85
-    app.globalData.isMember = true
-
-    // 本地缓存模拟 Token
-    wx.setStorageSync('auth_token', 'mock_visitor_token_val')
+    app.globalData.profileCompleteness = 0
+    app.globalData.isMember = false
+    app.globalData.isGuest = true
 
     wx.showToast({
-      title: '已进入游客体验模式',
-      icon: 'success',
+      title: '已进入游客浏览模式',
+      icon: 'none',
       duration: 1200
     })
 
     setTimeout(() => {
-      // 成功后直接进入推荐页
       wx.switchTab({
         url: '/pages/recommend/index'
       })

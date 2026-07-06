@@ -3,7 +3,7 @@
   <view class="portrait-wrapper">
     <swiper class="portrait-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" circular>
       <swiper-item>
-        <image class="portrait-img" src="{{guest.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBj1iILsmZ8lMcnuqGX4OeZL8ulIC7dajUDqvUyLcV_R0I9t4GYgrnEQpeKzIH4zdrXCV-28cEHMr1NsbK4Z052J-_s1HqhmT_wwQSnPgZT-3CVxBU3Fnyissl6SgcbuCiJwAEG3dFhEhGln0XuUpLvCsOrDEfaggdu-Ia-y5igmqVp7WqqBC13zVNvHjQyYx0ZU3fLiwNMDcii4erFfuzG8GK9x0xOpwLKTX70GBrIxqiJMT5EBMo9siGmz1N45qeQ2t2ZVuNmu6Y'}}" mode="aspectFill" />
+        <image class="portrait-img" src="{{guest.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
       </swiper-item>
     </swiper>
   </view>
@@ -32,7 +32,7 @@
     </view>
  
     <!-- 学校学历认证标签 (绿牌) -->
-    <view class="edu-badge-box mb-24" wx:if="{{guest.verified || true}}">
+    <view class="edu-badge-box mb-24" wx:if="{{guest.verified}}">
       <view class="verified-badge flex items-center">
         <view class="icon icon-shield text-success mr-4" style="background-color: #2E7D32;"></view>
         <text class="badge-text text-sm">{{guest.school}} · {{guest.degree}}</text>

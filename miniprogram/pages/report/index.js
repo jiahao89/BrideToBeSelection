@@ -88,8 +88,8 @@ Page({
     const reportType = categories[selectedCategory]
 
     try {
-      // 真实调用安全中心举报接口
-      await api.safety.report(targetId || 'mock_target', reportType, description)
+      // 系统反馈场景 targetId 为空，传空字符串由云函数处理
+      await api.safety.report(targetId || '', reportType, description)
       
       wx.showToast({
         title: '已提交举报',
@@ -103,15 +103,6 @@ Page({
 
     } catch (err) {
       console.error('举报提交失败:', err)
-      // 降级兜底：如果云函数出错/未就绪，模拟提交成功
-      wx.showToast({
-        title: '已提交举报(测试)',
-        icon: 'success',
-        duration: 2000
-      })
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 2000)
     } finally {
       this.setData({ submitting: false })
     }

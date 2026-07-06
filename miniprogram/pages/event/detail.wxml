@@ -1,9 +1,15 @@
 <view class="page-container event-detail-page">
+  <!-- 加载中 -->
+  <view wx:if="{{!event}}" class="flex flex-center py-40">
+    <text class="text-secondary text-sm">加载中...</text>
+  </view>
+
+  <block wx:if="{{event}}">
   <!-- 顶部 Banner 封面 -->
   <view class="detail-cover-box">
     <image 
       class="detail-cover" 
-      src="{{event.cover || '/assets/images/default-event.png'}}" 
+      src="{{event.cover || '/assets/images/default-avatar.png'}}" 
       mode="aspectFill" 
     />
     <view class="status-tag status-{{event.status}}">{{event.statusText}}</view>
@@ -115,6 +121,8 @@
       {{event.registered ? '已报名此活动' : (event.status === 'recruiting' ? '立即报名预约' : '活动已截止')}}
     </button>
   </view>
+
+  </block>
 
   <!-- 未认证拦截弹窗 (Design Spec 4.4) -->
   <view class="modal-mask flex flex-center" wx:if="{{showVerifyModal}}">

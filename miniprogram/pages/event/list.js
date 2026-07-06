@@ -33,6 +33,7 @@ Page({
   async fetchData() {
     this.setData({ loading: true })
     try {
+      await getApp().waitForLogin()
       const data = await api.event.list()
       const formatted = (data || []).map(item => this.formatEvent(item))
       this.setData({ list: formatted })
