@@ -31,6 +31,23 @@
   line-height: 1;
 }
 
+/* 全部已读按钮 */
+.mark-read-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-16);
+  flex-shrink: 0;
+}
+
+.mark-read-btn:active {
+  opacity: 0.6;
+}
+
+.mark-read-txt {
+  white-space: nowrap;
+}
+
 .active-tab-line {
   position: absolute;
   bottom: 0;

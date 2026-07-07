@@ -493,3 +493,55 @@ CREATE POLICY update_xy_messages ON public.xy_messages
     USING (auth.uid() = receiver_id)
     WITH CHECK (auth.uid() = receiver_id);
 
+
+-- ==========================================
+-- 1.10 浏览记录表 (xy_views) — 支持详情页"小眼睛"浏览量
+-- ==========================================
+CREATE TABLE IF NOT EXISTS public.xy_views (
+    id BIGSERIAL PRIMARY KEY,
+    viewer_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    target_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    CONSTRAINT check_not_self_view CHECK (viewer_id <> target_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_xy_views_target ON public.xy_views(target_id);
+CREATE INDEX IF NOT EXISTS idx_xy_views_viewer_target_time ON public.xy_views(viewer_id, target_id, created_at);
+
+ALTER TABLE public.xy_views ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS insert_xy_views ON public.xy_views;
+CREATE POLICY insert_xy_views ON public.xy_views
+    FOR INSERT TO authenticated
+    WITH CHECK (auth.uid() = viewer_id);
+
+DROP POLICY IF EXISTS select_xy_views ON public.xy_views;
+CREATE POLICY select_xy_views ON public.xy_views
+    FOR SELECT TO authenticated
+    USING (auth.uid() = viewer_id OR auth.uid() = target_id OR public.xy_is_admin());
+
+
+-- ==========================================
+-- 原子自增 RPC 函数 — 用于并发安全的计数器更新
+-- ==========================================
+
+-- 浏览量自增
+CREATE OR REPLACE FUNCTION public.increment_views_count(p_user_id UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE public.xy_profiles
+  SET views_count = views_count + 1
+  WHERE user_id = p_user_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 点赞量自增
+CREATE OR REPLACE FUNCTION public.increment_likes_count(p_user_id UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE public.xy_profiles
+  SET likes_count = likes_count + 1
+  WHERE user_id = p_user_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+

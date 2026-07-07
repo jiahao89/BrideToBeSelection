@@ -26,6 +26,8 @@ exports.main = async (event, context) => {
       return handleSend(openid, event)
     case 'received':
       return handleGetReceived(openid, event)
+    case 'markRead':
+      return handleMarkRead(openid, event)
     default:
       return fail('未知的操作类型')
   }

@@ -52,7 +52,10 @@ Page({
     const age = data.birth_year ? (currentYear - data.birth_year) : 25
     return {
       ...data,
+      // 映射后端字段名到 WXML 期望的字段名
+      avatar: data.avatar_url || (data.photos && data.photos[0]) || '',
       age,
+      verified: !!(data.verification_status && data.verification_status.education),
       questions: data.icebreaker_questions
         ? data.icebreaker_questions.map((q, i) => ({ id: i + 1, content: q }))
         : []

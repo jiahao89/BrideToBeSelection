@@ -454,6 +454,63 @@ async function handleSwitchRole(openid, event) {
 }
 
 /**
+ * 记录浏览（10 分钟去重，避免重复刷量）
+ */
+async function handleRecordView(openid, event) {
+  const { targetId } = event
+  if (!targetId) return fail('缺少目标用户 ID')
+  if (targetId === openid) return success(null) // 自己看自己不计数
+
+  try {
+    const { client, user } = await getSupabaseClientForUser(openid)
+
+    // 10 分钟去重：查询是否近期已有浏览记录
+    const tenMinAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+    const { data: recent, error: recentErr } = await client
+      .from('xy_views')
+      .select('id')
+      .eq('viewer_id', user.id)
+      .eq('target_id', targetId)
+      .gte('created_at', tenMinAgo)
+      .limit(1)
+
+    if (recentErr) {
+      console.warn('查询浏览去重失败，继续写入:', recentErr.message)
+    }
+
+    // 已有近期记录，直接返回成功（去重）
+    if (recent && recent.length > 0) {
+      return success({ deduplicated: true })
+    }
+
+    // 写入浏览记录
+    const { error: insertErr } = await client
+      .from('xy_views')
+      .insert({
+        viewer_id: user.id,
+        target_id: targetId
+      })
+
+    if (insertErr) {
+      console.warn('写入浏览记录失败:', insertErr.message)
+      return success(null) // 浏览量非核心指标，静默成功
+    }
+
+    // 原子自增 target 用户的 views_count
+    try {
+      await client.rpc('increment_views_count', { p_user_id: targetId })
+    } catch (rpcErr) {
+      console.warn('increment_views_count RPC 未就绪:', rpcErr.message)
+    }
+
+    return success({ deduplicated: false })
+  } catch (err) {
+    console.error('记录浏览异常:', err)
+    return success(null) // 非核心指标，不抛错
+  }
+}
+
+/**
  * 计算资料完整度
  */
 function calcCompleteness(profile) {

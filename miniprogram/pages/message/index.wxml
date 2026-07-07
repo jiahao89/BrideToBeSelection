@@ -17,6 +17,9 @@
       <text class="tab-btn-txt text-sm {{activeTab === 'like' ? 'text-primary text-bold' : 'text-secondary'}}">点赞消息</text>
       <view class="active-tab-line" wx:if="{{activeTab === 'like'}}"></view>
     </button>
+    <view class="mark-read-btn" bindtap="onMarkAllRead">
+      <text class="mark-read-txt text-xs text-tertiary">全部已读</text>
+    </view>
   </view>
 
   <!-- Message Content Area -->
@@ -54,7 +57,7 @@
             <!-- 互加微信状态 -->
             <view class="connected-row flex items-center mb-16" wx:if="{{item.status === 'accepted'}}">
               <view class="icon icon-shield text-success mr-8" style="background-color: #10B981;"></view>
-              <text class="connected-txt text-sm text-secondary text-bold">已互加微信：{{item.wechatId || 'linchen_98'}}</text>
+              <text class="connected-txt text-sm text-secondary text-bold">已互加微信：{{item.wechatId || '对方未填写微信号'}}</text>
             </view>
  
             <!-- 问答详情 -->

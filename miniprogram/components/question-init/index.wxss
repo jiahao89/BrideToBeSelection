@@ -19,6 +19,24 @@
   border-radius: 32rpx;
   padding: 40rpx;
   box-sizing: border-box;
+  position: relative;
+}
+
+.qi-close {
+  position: absolute;
+  top: 20rpx;
+  right: 24rpx;
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  font-size: 32rpx;
+  color: #9E8C86;
+  border-radius: 50%;
+}
+
+.qi-close:active {
+  background-color: #F1F5F9;
 }
 
 .qi-title {

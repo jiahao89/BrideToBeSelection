@@ -50,6 +50,10 @@ Component({
       } finally {
         this.setData({ submitting: false })
       }
+    },
+
+    onClose() {
+      this.triggerEvent('close')
     }
   }
 })

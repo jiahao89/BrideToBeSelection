@@ -117,13 +117,16 @@ Page({
       birth_year: birthYear,
       age: item.age || (currentYear - birthYear),
       schoolShort,
+      // 映射后端字段名
+      avatar: safe.avatar_url || (safe.photos && safe.photos[0]) || '',
       degree: item.degree || '',
-      job: safe.job || '',
-      city: item.city || '',
-      view_count: item.view_count != null ? String(item.view_count) : '0',
-      like_count: item.like_count != null ? String(item.like_count) : '0',
+      job: safe.job || safe.job_title || '',
+      city: item.city || item.hometown || '',
+      hometown: item.hometown || item.city || '',
+      view_count: item.view_count != null ? String(item.view_count) : (item.views_count != null ? String(item.views_count) : '0'),
+      like_count: item.like_count != null ? String(item.like_count) : (item.likes_count != null ? String(item.likes_count) : '0'),
       isLiked: item.isLiked || false,
-      is_locked: !isEduVerified
+      is_locked: item.is_locked || false
     }
   },
 

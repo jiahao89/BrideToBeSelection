@@ -23,7 +23,22 @@ Page({
       await getApp().waitForLogin()
       const data = await api.user.getProfile()
       // API 返回 { profile: {...}, verifications: [...], endorsements: [] }
-      const profile = (data && data.profile) ? data.profile : (data || {})
+      const raw = (data && data.profile) ? data.profile : (data || {})
+      // 映射后端字段名到 WXML 期望的字段名
+      const verStatus = raw.verification_status || {}
+      const profile = {
+        ...raw,
+        avatar: raw.avatar_url || '',
+        eduVerified: !!(verStatus.education || verStatus.education_degree),
+        idVerified: !!verStatus.identity,
+        workVerified: !!verStatus.work,
+        likeCount: raw.likes_count || 0,
+        followersCount: raw.views_count || 0,
+        matchCount: 0, // 一期暂无互配统计
+        rejected: raw.status === 'rejected',
+        rejectReason: raw.reject_reason || '',
+        hasUnreadAnswers: false
+      }
       this.setData({ profile })
     } catch (err) {
       console.error('获取个人资料失败:', err)
@@ -56,6 +71,10 @@ Page({
   onQuestionSaved() {
     this.setData({ questionInitShow: false })
     this.fetchData()
+  },
+
+  onQuestionClose() {
+    this.setData({ questionInitShow: false })
   },
 
   onReceivedAnswers() {

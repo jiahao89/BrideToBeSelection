@@ -140,5 +140,5 @@
   </view>
 
   <!-- 心动问题设置弹窗 -->
-  <question-init show="{{questionInitShow}}" bind:saved="onQuestionSaved" />
+  <question-init show="{{questionInitShow}}" bind:saved="onQuestionSaved" bind:close="onQuestionClose" />
 </view>

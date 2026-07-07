@@ -1,6 +1,9 @@
 <!-- 心动问题初始化弹窗 - 新用户强制设置 3 个心动问题 -->
 <view wx:if="{{show}}" class="qi-mask">
   <view class="qi-card">
+    <!-- 关闭按钮 -->
+    <view class="qi-close" bindtap="onClose">✕</view>
+
     <!-- 标题 -->
     <view class="qi-title">设置你的心动问题</view>
     <view class="qi-subtitle">这些问题将展示给向你发起心动的TA，请认真填写 3 个问题</view>
