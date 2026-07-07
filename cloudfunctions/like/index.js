@@ -248,19 +248,42 @@ async function handleGetReceived(openid, event) {
       return item
     })
 
-    // 5. 自动标记这些消息为已读
-    const unreadIds = messages.filter(m => !m.is_read).map(m => m.id)
-    if (unreadIds.length > 0) {
-      await client
-        .from('xy_messages')
-        .update({ is_read: true })
-        .in('id', unreadIds)
-    }
+    // 5. 不再自动标记已读，由前端主动调用 markRead
 
     return success(formatted)
   } catch (err) {
     console.error('获取收到消息异常:', err)
     return fail('获取通知消息异常')
+  }
+}
+
+/**
+ * 批量标记消息为已读
+ */
+async function handleMarkRead(openid, event) {
+  const { messageIds } = event
+  if (!messageIds || !Array.isArray(messageIds) || messageIds.length === 0) {
+    return fail('未指定要标记的消息')
+  }
+
+  try {
+    const { client, user } = await getSupabaseClientForUser(openid)
+
+    const { error } = await client
+      .from('xy_messages')
+      .update({ is_read: true })
+      .in('id', messageIds)
+      .eq('receiver_id', user.id)
+
+    if (error) {
+      console.error('标记已读失败:', error)
+      return fail('标记已读失败')
+    }
+
+    return success(null, '已标记为已读')
+  } catch (err) {
+    console.error('标记已读异常:', err)
+    return fail('服务异常')
   }
 }
 

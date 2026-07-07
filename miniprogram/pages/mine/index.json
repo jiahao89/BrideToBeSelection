@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "我的",
-  "usingComponents": {}
+  "usingComponents": {
+    "question-init": "/components/question-init/index"
+  }
 }

@@ -1,4 +1,5 @@
 const { api } = require('../../utils/api')
+const { maskRecommendItem } = require('../../utils/desensitize')
 
 Page({
   data: {
@@ -106,18 +107,23 @@ Page({
     const birthYear = item.birth_year || (currentYear - (item.age || 25))
     const schoolShort = item.school ? item.school.substring(0, 4) : '校友'
 
+    // 未学历认证的用户，对推荐卡片做脱敏处理（PRD 5.3）
+    const app = getApp()
+    const isEduVerified = app.globalData.isVerified && app.globalData.isVerified.education
+    const safe = isEduVerified ? item : maskRecommendItem(item)
+
     return {
-      ...item,
+      ...safe,
       birth_year: birthYear,
       age: item.age || (currentYear - birthYear),
       schoolShort,
       degree: item.degree || '',
-      job: item.job || '',
+      job: safe.job || '',
       city: item.city || '',
       view_count: item.view_count != null ? String(item.view_count) : '0',
       like_count: item.like_count != null ? String(item.like_count) : '0',
       isLiked: item.isLiked || false,
-      is_locked: item.is_locked || false
+      is_locked: !isEduVerified
     }
   },
 

@@ -51,9 +51,10 @@ async function handleReport(openid, event) {
       .from('xy_reports')
       .insert({
         reporter_id: user.id,
-        reported_user_id: targetId,
+        reported_user_id: targetId || null,
         reason_category: reasonCategory,
         description: description || '',
+        screenshot_urls: screenshotUrls || [],
         status: 'pending',
         handle_result: 'none'
       })

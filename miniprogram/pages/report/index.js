@@ -75,7 +75,7 @@ Page({
   },
 
   async onSubmit() {
-    const { targetId, categories, selectedCategory, description } = this.data
+    const { targetId, categories, selectedCategory, description, images } = this.data
 
     if (!description || description.trim().length < 10) {
       this.setData({
@@ -88,19 +88,26 @@ Page({
     const reportType = categories[selectedCategory]
 
     try {
-      // 系统反馈场景 targetId 为空，传空字符串由云函数处理
-      await api.safety.report(targetId || '', reportType, description)
-      
-      wx.showToast({
-        title: '已提交举报',
-        icon: 'success',
-        duration: 2000
-      })
-      
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 2000)
+      // 上传图片到云存储
+      let screenshotUrls = []
+      if (images.length > 0) {
+        wx.showLoading({ title: '上传凭证...', mask: true })
+        for (const filePath of images) {
+          try {
+            const cloudPath = `reports/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`
+            const uploadRes = await wx.cloud.uploadFile({ cloudPath, filePath })
+            screenshotUrls.push(uploadRes.fileID)
+          } catch (uploadErr) {
+            console.error('图片上传失败:', uploadErr)
+          }
+        }
+        wx.hideLoading()
+      }
 
+      await api.safety.report(targetId || '', reportType, description, screenshotUrls)
+      
+      wx.showToast({ title: '已提交举报', icon: 'success', duration: 2000 })
+      setTimeout(() => { wx.navigateBack() }, 2000)
     } catch (err) {
       console.error('举报提交失败:', err)
     } finally {

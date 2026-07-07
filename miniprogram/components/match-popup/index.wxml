@@ -1,0 +1,38 @@
+<!-- 匹配成功弹窗组件 -->
+<view class="match-popup" wx:if="{{show}}">
+  <!-- 半透明遮罩，点击关闭 -->
+  <view class="match-mask" bindtap="onClose"></view>
+
+  <!-- 中央卡片 -->
+  <view class="match-card">
+    <!-- 双头像聚合区 + 中心心形 -->
+    <view class="match-avatars">
+      <image
+        class="match-avatar match-avatar-left"
+        src="{{currentAvatar}}"
+        mode="aspectFill"
+      />
+      <view class="match-heart"></view>
+      <image
+        class="match-avatar match-avatar-right"
+        src="{{avatar}}"
+        mode="aspectFill"
+      />
+    </view>
+
+    <!-- 标题 -->
+    <view class="match-title">匹配成功！</view>
+
+    <!-- 副标题 -->
+    <view class="match-subtitle">{{nickname}} 已接受你的心动</view>
+
+    <!-- 微信号展示 -->
+    <view class="match-wechat">
+      <text class="match-wechat-label">对方微信号: </text>
+      <text class="match-wechat-id">{{wechatId}}</text>
+    </view>
+
+    <!-- 主操作按钮 -->
+    <button class="match-btn" bindtap="onCopyWechat">复制微信号并关闭</button>
+  </view>
+</view>

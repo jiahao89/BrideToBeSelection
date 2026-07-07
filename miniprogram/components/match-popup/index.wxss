@@ -1,0 +1,209 @@
+/* 匹配成功弹窗组件样式 */
+
+/* === 遮罩层 === */
+.match-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.match-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* === 中央卡片 === */
+.match-card {
+  position: relative;
+  width: 600rpx;
+  padding: 48rpx 32rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-sizing: border-box;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.2);
+  animation: popupIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === 双头像聚合区 === */
+.match-avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  margin-bottom: 32rpx;
+}
+
+.match-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FFFFFF;
+  background: #FFF0ED;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 左侧头像：从 -100rpx 向中心聚合 */
+.match-avatar-left {
+  animation: convergeLeft 0.6s ease-out both;
+}
+
+/* 右侧头像：从 +100rpx 向中心聚合 */
+.match-avatar-right {
+  animation: convergeRight 0.6s ease-out both;
+}
+
+/* === 中心心形 === */
+.match-heart {
+  width: 60rpx;
+  height: 60rpx;
+  background-color: #FF7A59;
+  flex-shrink: 0;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  animation: beat 1s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* === 文案区 === */
+.match-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FF7A59;
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.match-subtitle {
+  font-size: 28rpx;
+  color: #7A6860;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.match-wechat {
+  text-align: center;
+  padding: 20rpx 24rpx;
+  background: #FFF0ED;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.match-wechat-label {
+  color: #7A6860;
+}
+
+.match-wechat-id {
+  color: #2C1810;
+  font-weight: 600;
+}
+
+/* === 主按钮 === */
+.match-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 32rpx;
+  background: linear-gradient(135deg, #FF9E84, #FF7A59);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 24rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(255, 122, 89, 0.25);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-sizing: border-box;
+}
+
+.match-btn::after {
+  border: none;
+}
+
+.match-btn:active {
+  opacity: 0.85;
+  transform: scale(0.97);
+}
+
+/* === 关键帧动画 === */
+
+/* 遮罩淡入 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 卡片弹出（带回弹缓动） */
+@keyframes popupIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 左侧头像聚合：从 -100rpx 滑入 */
+@keyframes convergeLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100rpx);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 右侧头像聚合：从 +100rpx 滑入 */
+@keyframes convergeRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100rpx);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 心形跳动 */
+@keyframes beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.15);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+}

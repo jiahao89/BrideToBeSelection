@@ -2,7 +2,12 @@
   <!-- 顶部大图轮播 -->
   <view class="portrait-wrapper">
     <swiper class="portrait-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" circular>
-      <swiper-item>
+      <block wx:if="{{guest.photos && guest.photos.length > 0}}">
+        <swiper-item wx:for="{{guest.photos}}" wx:key="*this">
+          <image class="portrait-img" src="{{item}}" mode="aspectFill" />
+        </swiper-item>
+      </block>
+      <swiper-item wx:else>
         <image class="portrait-img" src="{{guest.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
       </swiper-item>
     </swiper>
@@ -79,14 +84,11 @@
  
     <!-- 兴趣标签与自我介绍 -->
     <view class="extra-bio-section mb-40">
-      <view class="bio-tags flex flex-wrap gap-8 mb-16">
-        <view class="bio-pill text-xs text-secondary">温柔大方</view>
-        <view class="bio-pill text-xs text-secondary">喜欢猫咪</view>
-        <view class="bio-pill text-xs text-secondary">羽毛球爱好者</view>
-        <view class="bio-pill text-xs text-secondary">美食博主潜质</view>
+      <view class="bio-tags flex flex-wrap gap-8 mb-16" wx:if="{{guest.hobbies}}">
+        <view class="bio-pill text-xs text-secondary" wx:for="{{guest.hobbies}}" wx:key="*this">{{item}}</view>
       </view>
-      <view class="bio-intro-text text-secondary text-sm leading-relaxed">
-        “希望能遇到一个三观一致，能一起去看日出日落的同频Ta。”
+      <view class="bio-intro-text text-secondary text-sm leading-relaxed" wx:if="{{guest.self_intro}}">
+        {{guest.self_intro}}
       </view>
     </view>
   </view>
@@ -102,4 +104,13 @@
       <text class="btn-txt">发起心动</text>
     </button>
   </view>
+
+  <!-- 匹配成功弹窗 -->
+  <match-popup 
+    show="{{matchPopupShow}}" 
+    avatar="{{matchedUser.avatar}}" 
+    nickname="{{matchedUser.nickname}}" 
+    wechatId="{{matchedUser.wechat_id}}"
+    bind:close="onMatchClose" 
+  />
 </view>

@@ -4,7 +4,8 @@ const { nav } = require('../../utils/util')
 Page({
   data: {
     loading: false,
-    profile: null
+    profile: null,
+    questionInitShow: false
   },
 
   onShow() {
@@ -49,7 +50,12 @@ Page({
 
   onSettingsHeart() {
     if (!getApp().checkGuest('心动设置')) return
-    wx.showToast({ title: '我的心动设置功能开发中', icon: 'none' })
+    this.setData({ questionInitShow: true })
+  },
+
+  onQuestionSaved() {
+    this.setData({ questionInitShow: false })
+    this.fetchData()
   },
 
   onReceivedAnswers() {
@@ -65,12 +71,14 @@ Page({
 
   onMyCrushList() {
     if (!getApp().checkGuest('查看心动')) return
-    wx.showToast({ title: '我发起的心动开发中', icon: 'none' })
+    // 跳转到消息中心的「心动」Tab
+    wx.switchTab({ url: '/pages/message/index' })
   },
 
   onMyIcebreakers() {
     if (!getApp().checkGuest('查看破冰问题')) return
-    wx.showToast({ title: '我的破冰问题开发中', icon: 'none' })
+    // 复用心动设置入口展示已有问题
+    this.setData({ questionInitShow: true })
   },
 
   onContactService() {

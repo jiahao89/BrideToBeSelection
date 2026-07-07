@@ -138,4 +138,7 @@
   <view class="footer-info text-center pb-40">
     <view class="version-text text-xs text-tertiary">六朝松校缘小程序 v1.0.0 (MVP)</view>
   </view>
+
+  <!-- 心动问题设置弹窗 -->
+  <question-init show="{{questionInitShow}}" bind:saved="onQuestionSaved" />
 </view>

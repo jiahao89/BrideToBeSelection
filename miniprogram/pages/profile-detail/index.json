@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "嘉宾详情",
-  "usingComponents": {}
+  "usingComponents": {
+    "match-popup": "/components/match-popup/index"
+  }
 }

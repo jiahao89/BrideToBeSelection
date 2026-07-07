@@ -67,6 +67,42 @@ Page({
       })
     } finally {
       this.setData({ loading: false })
+      this._updateTabBarBadge()
+    }
+  },
+
+  _updateTabBarBadge() {
+    const { crushList, likeList } = this.data
+    const unreadCount = [...crushList, ...likeList].filter(m => !m.is_read).length
+    if (unreadCount > 0) {
+      wx.setTabBarBadge({ index: 2, text: String(unreadCount > 99 ? '99+' : unreadCount) })
+    } else {
+      wx.removeTabBarBadge({ index: 2 })
+    }
+  },
+
+  async onMarkAllRead() {
+    const { activeTab, crushList, likeList } = this.data
+    const list = activeTab === 'crush' ? crushList : likeList
+    const unreadIds = list.filter(m => !m.is_read).map(m => m._id)
+
+    if (unreadIds.length === 0) {
+      wx.showToast({ title: '没有未读消息', icon: 'none' })
+      return
+    }
+
+    try {
+      await api.like.markRead(unreadIds)
+      // 更新本地状态
+      if (activeTab === 'crush') {
+        this.setData({ crushList: crushList.map(m => ({ ...m, is_read: true })) })
+      } else {
+        this.setData({ likeList: likeList.map(m => ({ ...m, is_read: true })) })
+      }
+      this._updateTabBarBadge()
+      wx.showToast({ title: '已全部标记为已读', icon: 'success' })
+    } catch (err) {
+      console.error('标记已读失败:', err)
     }
   },
 
@@ -97,7 +133,7 @@ Page({
       success: async (res) => {
         if (res.confirm) {
           try {
-            await api.icebreaker.reviewAnswer(item.heart_request_id, '', true)
+            await api.icebreaker.review(item.heart_request_id, true)
             wx.showToast({ title: '已接受，已解锁微信号', icon: 'success' })
             this.fetchData() // 刷新列表以从服务器加载最新的微信号
           } catch (err) {
@@ -119,7 +155,7 @@ Page({
       success: async (res) => {
         if (res.confirm) {
           try {
-            await api.icebreaker.reviewAnswer(item.heart_request_id, '', false)
+            await api.icebreaker.review(item.heart_request_id, false)
             wx.showToast({ title: '已委婉拒绝', icon: 'none' })
             this.fetchData() // 刷新列表
           } catch (err) {

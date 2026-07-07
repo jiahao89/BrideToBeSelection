@@ -1,0 +1,39 @@
+<!-- 心动问题初始化弹窗 - 新用户强制设置 3 个心动问题 -->
+<view wx:if="{{show}}" class="qi-mask">
+  <view class="qi-card">
+    <!-- 标题 -->
+    <view class="qi-title">设置你的心动问题</view>
+    <view class="qi-subtitle">这些问题将展示给向你发起心动的TA，请认真填写 3 个问题</view>
+
+    <!-- 3 个问题输入框 -->
+    <view class="qi-question-list">
+      <view
+        wx:for="{{questions}}"
+        wx:key="index"
+        class="qi-question-item"
+      >
+        <view class="qi-question-label">问题 {{index + 1}}</view>
+        <textarea
+          class="qi-textarea"
+          value="{{item}}"
+          data-idx="{{index}}"
+          maxlength="100"
+          placeholder="例如：你理想中的周末是怎样度过的？"
+          placeholder-class="qi-placeholder"
+          bindinput="onInputQuestion"
+        />
+      </view>
+    </view>
+
+    <!-- 一键导入精选问题 -->
+    <view class="qi-preset-link" bindtap="onUsePreset">一键导入精选问题</view>
+
+    <!-- 提交按钮 -->
+    <button
+      class="qi-submit-btn"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+      loading="{{submitting}}"
+    >保存问题，开启校缘之旅</button>
+  </view>
+</view>

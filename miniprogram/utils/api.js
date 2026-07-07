@@ -126,12 +126,7 @@ const api = {
     getProfile: (userId) => callCloud('user', { action: 'getProfile', userId }),
     uploadVerification: (data) => callCloud('user', { action: 'uploadVerification', ...data }),
     switchRole: (role) => callCloud('user', { action: 'switchRole', role }),
-  },
-
-  // --- 邀请模块 ---
-  invite: {
-    generate: (circleId) => callCloud('invite', { action: 'generate', circleId }),
-    join: (code) => callCloud('invite', { action: 'join', code }),
+    recordView: (targetId) => callCloud('user', { action: 'recordView', targetId }, { showLoading: false }),
   },
 
   // --- 推荐模块 ---
@@ -144,6 +139,7 @@ const api = {
     send: (targetId, context, eventId) =>
       callCloud('like', { action: 'send', targetId, context, eventId }),
     getReceived: () => callCloud('like', { action: 'received' }),
+    markRead: (messageIds) => callCloud('like', { action: 'markRead', messageIds }, { showLoading: false }),
   },
 
   // --- 破冰问答 ---
@@ -151,53 +147,8 @@ const api = {
     getConfig: () => callCloud('icebreaker', { action: 'getConfig' }),
     saveConfig: (config) => callCloud('icebreaker', { action: 'saveConfig', config }),
     getQuestions: (targetId) => callCloud('icebreaker', { action: 'getQuestions', targetId }),
-    submitAnswer: (sessionId, stage, answers) =>
-      callCloud('icebreaker', { action: 'submitAnswer', sessionId, stage, answers }),
-    reviewAnswer: (sessionId, stage, passed) =>
-      callCloud('icebreaker', { action: 'review', sessionId, stage, passed }),
-  },
-
-  // --- 匹配模块 ---
-  match: {
-    getList: () => callCloud('match', { action: 'getList' }),
-    updateMilestone: (matchId, stage) =>
-      callCloud('match', { action: 'updateMilestone', matchId, stage }),
-  },
-
-  // --- 敏感信息 ---
-  sensitive: {
-    requestExchange: (targetId) =>
-      callCloud('sensitive', { action: 'requestExchange', targetId }),
-    authorize: (targetId, fields) =>
-      callCloud('sensitive', { action: 'authorize', targetId, fields }),
-    revoke: (targetId) =>
-      callCloud('sensitive', { action: 'revoke', targetId }),
-    getDecrypted: (targetId) =>
-      callCloud('sensitive', { action: 'getDecrypted', targetId }),
-  },
-
-  // --- 关系链 ---
-  relation: {
-    getPath: (targetId) =>
-      callCloud('relation', { action: 'getPath', targetId }, { showLoading: false }),
-  },
-
-  // --- 父母代办 ---
-  parent: {
-    generateLinkCode: () => callCloud('parent', { action: 'generateLinkCode' }),
-    bindChild: (code) => callCloud('parent', { action: 'bindChild', code }),
-    requestAction: (actionType, targetId) =>
-      callCloud('parent', { action: 'requestAction', actionType, targetId }),
-    childDecision: (requestId, approved) =>
-      callCloud('parent', { action: 'childDecision', requestId, approved }),
-  },
-
-  // --- 媒人 ---
-  matchmaker: {
-    endorse: (userId, content, visibility) =>
-      callCloud('matchmaker', { action: 'endorse', userId, content, visibility }),
-    getTrackList: () => callCloud('matchmaker', { action: 'getTrackList' }),
-    nudge: (matchId) => callCloud('matchmaker', { action: 'nudge', matchId }),
+    review: (requestId, passed) =>
+      callCloud('icebreaker', { action: 'review', requestId, passed }),
   },
 
   // --- 活动 ---
@@ -205,27 +156,12 @@ const api = {
     list: (params) => callCloud('event', { action: 'list', ...params }),
     detail: (eventId) => callCloud('event', { action: 'detail', eventId }),
     register: (eventId) => callCloud('event', { action: 'register', eventId }),
-    preSelect: (eventId, userIds) =>
-      callCloud('event', { action: 'preSelect', eventId, userIds }),
-    checkin: (eventId) => callCloud('event', { action: 'checkin', eventId }),
-    submitFeedback: (eventId, targetId, feedback) =>
-      callCloud('event', { action: 'submitFeedback', eventId, targetId, feedback }),
   },
 
   // --- 安全 ---
   safety: {
-    report: (targetId, type, description) =>
-      callCloud('safety', { action: 'report', targetId, type, description }),
-    block: (targetId) => callCloud('safety', { action: 'block', targetId }),
-    unblock: (targetId) => callCloud('safety', { action: 'unblock', targetId }),
-    getBlockList: () => callCloud('safety', { action: 'getBlockList' }),
-  },
-
-  // --- 会员 ---
-  membership: {
-    purchase: (plan) => callCloud('membership', { action: 'purchase', plan }),
-    checkAccess: (feature) =>
-      callCloud('membership', { action: 'checkAccess', feature }, { showLoading: false }),
+    report: (targetId, type, description, screenshotUrls) =>
+      callCloud('safety', { action: 'report', targetId, type, description, screenshotUrls }),
   },
 }
 

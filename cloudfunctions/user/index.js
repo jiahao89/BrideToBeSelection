@@ -32,6 +32,8 @@ exports.main = async (event, context) => {
       return handleUploadVerification(openid, event)
     case 'switchRole':
       return handleSwitchRole(openid, event)
+    case 'recordView':
+      return handleRecordView(openid, event)
     default:
       return fail('未知的操作类型')
   }
