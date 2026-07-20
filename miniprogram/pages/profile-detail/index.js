@@ -9,12 +9,34 @@ Page({
     guest: null,
     matchPopupShow: false,
     matchedUser: null,
+    enterAnim: null,
   },
 
   onLoad(options) {
     const id = options.id || '1'
     this.setData({ id })
+
+    // 共享元素过渡：从点击位置展开入场动画
+    const fx = parseFloat(options.fx) || 0
+    const fy = parseFloat(options.fy) || 0
+    this._playEnterAnimation(fx, fy)
+
     this.fetchData(id)
+  },
+
+  /**
+   * 入场动画：从卡片位置缩放展开到全屏（共享元素过渡简化版）
+   */
+  _playEnterAnimation(fx, fy) {
+    const animation = wx.createAnimation({
+      duration: 320,
+      timingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    })
+    // 起始状态：缩小到卡片尺寸
+    animation.opacity(0).scale(0.6).translate(fx * 0.3, fy * 0.3).step({ duration: 0 })
+    // 展开到全屏
+    animation.opacity(1).scale(1).translate(0, 0).step()
+    this.setData({ enterAnim: animation.export() })
   },
 
   async fetchData(id) {

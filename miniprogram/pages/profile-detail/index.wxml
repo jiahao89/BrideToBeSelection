@@ -1,4 +1,4 @@
-<view class="page-container profile-detail-page">
+<view class="page-container profile-detail-page" animation="{{enterAnim}}">
   <!-- 顶部大图轮播 -->
   <view class="portrait-wrapper">
     <swiper class="portrait-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" circular>

@@ -1,0 +1,115 @@
+.upload-page {
+  background-color: var(--color-bg-page);
+  padding: var(--page-padding);
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.tip-box {
+  background-color: #FFF4ED;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-16);
+  margin-bottom: var(--spacing-24);
+  border-left: 6rpx solid var(--color-primary);
+}
+
+.tip-text {
+  line-height: 1.6;
+  font-size: 26rpx;
+}
+
+.section-title {
+  color: var(--color-text-primary);
+}
+
+.required {
+  color: var(--color-danger);
+  margin-left: 4rpx;
+}
+
+/* 上传区域 */
+.upload-area {
+  width: 100%;
+  min-height: 360rpx;
+  position: relative;
+}
+
+.upload-add-btn {
+  width: 100%;
+  height: 360rpx;
+  background-color: #FFF9F6;
+  border: 4rpx dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.upload-add-btn:active {
+  border-color: var(--color-primary);
+  background-color: #FFF0EA;
+}
+
+.plus-icon {
+  font-size: 72rpx;
+  color: var(--color-text-tertiary);
+  line-height: 1;
+  margin-bottom: 8rpx;
+}
+
+.add-text {
+  color: var(--color-text-tertiary);
+}
+
+.upload-preview {
+  position: relative;
+  width: 100%;
+  height: 360rpx;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 48rpx;
+  height: 48rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+/* 多图上传网格 */
+.image-uploader-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-16);
+}
+
+.image-uploader-grid .upload-preview {
+  width: 340rpx;
+  height: 260rpx;
+}
+
+.image-uploader-grid .upload-add-btn {
+  width: 340rpx;
+  height: 260rpx;
+}
+
+/* 底部按钮 */
+.action-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--spacing-16) var(--page-padding);
+  background-color: var(--color-bg-page);
+  box-shadow: 0 -4rpx 24rpx rgba(0, 0, 0, 0.04);
+}

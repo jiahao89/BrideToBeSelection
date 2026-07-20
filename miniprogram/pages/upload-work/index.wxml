@@ -1,0 +1,37 @@
+<view class="page-container upload-page">
+  <!-- 头部提示 -->
+  <view class="tip-box">
+    <text class="tip-text text-secondary">上传企业工牌、劳动合同或在职证明照片，供管理员人工核查工作信息。照片仅用于审核，不会对外展示。</text>
+  </view>
+
+  <!-- 图片上传区域 -->
+  <view class="section-title text-medium mb-12">上传工作证明<text class="required">*</text> <text class="text-tertiary text-xs ml-8">(最多 2 张)</text></view>
+  <view class="image-uploader-grid mb-32">
+    <block wx:for="{{images}}" wx:key="index">
+      <view class="upload-preview">
+        <image class="preview-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{item}}" />
+        <view class="delete-btn flex flex-center" catchtap="onDeleteImage" data-index="{{index}}">×</view>
+      </view>
+    </block>
+
+    <view
+      wx:if="{{images.length < 2}}"
+      class="upload-add-btn flex flex-col flex-center"
+      bindtap="onChooseImage"
+    >
+      <text class="plus-icon">+</text>
+      <text class="add-text text-xs text-tertiary">上传图片</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="action-box safe-bottom">
+    <button
+      class="btn btn-primary btn-block btn-lg {{submitting ? 'btn-disabled' : ''}}"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '上传中...' : '提交人工审核'}}
+    </button>
+  </view>
+</view>

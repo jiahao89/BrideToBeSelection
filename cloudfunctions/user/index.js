@@ -348,8 +348,33 @@ function parseIdCard(idCard) {
  * 上传认证材料与实名建档
  */
 async function handleUploadVerification(openid, event) {
-  const { realName, idCard, school, degree, identityUrls, educationUrls, workUrls } = event
+  const { realName, idCard, school, degree, identityUrls, educationUrls, workUrls, verifyType, imageUrls } = event
 
+  // 分支 A：单类型人工复核上传（来自 upload-identity/education/work 页面）
+  if (verifyType && imageUrls && imageUrls.length > 0) {
+    try {
+      const { client, user } = await getSupabaseClientForUser(openid)
+
+      // 写入审核流水：status=pending，等待管理员人工审核
+      for (const url of imageUrls) {
+        await client
+          .from('xy_verifications')
+          .insert({
+            user_id: user.id,
+            verify_type: verifyType,
+            doc_url: url,
+            status: 'pending'
+          })
+      }
+
+      return success({ verifyType, count: imageUrls.length })
+    } catch (err) {
+      console.error('人工复核上传失败:', err)
+      return fail('上传复核材料失败，请重试')
+    }
+  }
+
+  // 分支 B：完整五步认证建档（来自 verification 页面）
   if (!realName || !idCard || !school) {
     return fail('请填写完整的实名与高校认证信息')
   }

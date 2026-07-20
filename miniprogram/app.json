@@ -11,7 +11,10 @@
     "pages/mine/index",
     "pages/report/index",
     "pages/event/list",
-    "pages/event/detail"
+    "pages/event/detail",
+    "pages/upload-identity/index",
+    "pages/upload-education/index",
+    "pages/upload-work/index"
   ],
   "tabBar": {
     "color": "#8A8A8A",

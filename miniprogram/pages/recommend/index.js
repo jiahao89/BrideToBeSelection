@@ -136,7 +136,11 @@ Page({
       wx.showToast({ title: '完成认证后解锁', icon: 'none' })
       return
     }
-    wx.navigateTo({ url: `/pages/profile-detail/index?id=${id}` })
+    // 传递触摸位置，用于详情页入场动画（共享元素过渡简化版）
+    const touch = e.detail || {}
+    const x = touch.x || (e.currentTarget.offsetLeft || 0)
+    const y = touch.y || (e.currentTarget.offsetTop || 0)
+    wx.navigateTo({ url: `/pages/profile-detail/index?id=${id}&fx=${x}&fy=${y}` })
   },
 
   async onLikeToggle(e) {

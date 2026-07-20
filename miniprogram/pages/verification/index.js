@@ -163,6 +163,13 @@ Page({
     }
   },
 
+  // 跳转到上传证明页（备用流）
+  onGoToUpload(e) {
+    const { page } = e.currentTarget.dataset
+    if (!getApp().checkGuest('上传证明')) return
+    nav.navigateTo(`/pages/${page}/index?from=verification`)
+  },
+
   // 跳过认证
   onSkip() {
     wx.showModal({

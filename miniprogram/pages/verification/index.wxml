@@ -83,6 +83,12 @@
       <view class="icon icon-lock text-primary mr-8"></view>
       <text class="security-txt text-sm text-secondary leading-relaxed">您的信息已通过国密级别算法加密传输，校缘平台承诺对实名数据严格保密，仅作为圈层可信度背书使用。</text>
     </view>
+
+    <!-- 实名核验失败备用流入口 -->
+    <view class="manual-upload-link flex items-center justify-between mt-24" bindtap="onGoToUpload" data-page="upload-identity">
+      <text class="link-text text-sm text-secondary">核验不通过？上传身份证照片申请人工复核</text>
+      <text class="input-arrow text-tertiary">❯</text>
+    </view>
   </view>
 
   <!-- Step 2: 学历认证 -->
@@ -172,6 +178,12 @@
     <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
       {{errorMsg}}
     </view>
+
+    <!-- 学历证明上传入口（可选） -->
+    <view class="manual-upload-link flex items-center justify-between mt-24" bindtap="onGoToUpload" data-page="upload-education">
+      <text class="link-text text-sm text-secondary">上传学生证/毕业证照片申请人工核查</text>
+      <text class="input-arrow text-tertiary">❯</text>
+    </view>
   </view>
 
   <!-- Step 3: 工作认证 -->
@@ -206,6 +218,12 @@
  
     <view class="error-box text-danger text-xs mb-8" wx:if="{{errorMsg}}">
       {{errorMsg}}
+    </view>
+
+    <!-- 工作证明上传入口（可选） -->
+    <view class="manual-upload-link flex items-center justify-between mt-24" bindtap="onGoToUpload" data-page="upload-work">
+      <text class="link-text text-sm text-secondary">上传工牌/在职证明照片申请人工核查</text>
+      <text class="input-arrow text-tertiary">❯</text>
     </view>
   </view>
 

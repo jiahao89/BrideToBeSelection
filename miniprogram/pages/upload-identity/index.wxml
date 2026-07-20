@@ -1,0 +1,43 @@
+<view class="page-container upload-page">
+  <!-- 头部提示 -->
+  <view class="tip-box">
+    <text class="tip-text text-secondary">当二要素实名核验失败时（如生僻字、新证件等），可通过上传身份证照片申请人工复核。照片仅用于人工审核，审核通过后不会公开展示。</text>
+  </view>
+
+  <!-- 人像面上传 -->
+  <view class="section-title text-medium mb-12">身份证人像面<text class="required">*</text></view>
+  <view class="upload-area mb-32">
+    <view wx:if="{{frontImage}}" class="upload-preview" bindtap="onPreviewImage" data-url="{{frontImage}}">
+      <image class="preview-img" src="{{frontImage}}" mode="aspectFill" />
+      <view class="delete-btn flex flex-center" catchtap="onDeleteImage" data-type="frontImage">×</view>
+    </view>
+    <view wx:else class="upload-add-btn flex flex-col flex-center" bindtap="onChooseImage" data-type="frontImage">
+      <text class="plus-icon">+</text>
+      <text class="add-text text-xs text-tertiary">拍摄/选择人像面</text>
+    </view>
+  </view>
+
+  <!-- 国徽面上传 -->
+  <view class="section-title text-medium mb-12">身份证国徽面<text class="required">*</text></view>
+  <view class="upload-area mb-32">
+    <view wx:if="{{backImage}}" class="upload-preview" bindtap="onPreviewImage" data-url="{{backImage}}">
+      <image class="preview-img" src="{{backImage}}" mode="aspectFill" />
+      <view class="delete-btn flex flex-center" catchtap="onDeleteImage" data-type="backImage">×</view>
+    </view>
+    <view wx:else class="upload-add-btn flex flex-col flex-center" bindtap="onChooseImage" data-type="backImage">
+      <text class="plus-icon">+</text>
+      <text class="add-text text-xs text-tertiary">拍摄/选择国徽面</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="action-box safe-bottom">
+    <button
+      class="btn btn-primary btn-block btn-lg {{submitting ? 'btn-disabled' : ''}}"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '上传中...' : '提交人工审核'}}
+    </button>
+  </view>
+</view>
