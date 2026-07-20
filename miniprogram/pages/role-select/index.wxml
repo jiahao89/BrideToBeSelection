@@ -8,9 +8,9 @@
   <view class="role-cards-area">
     <!-- 我是单身 -->
     <view
-      class="role-card {{selectedRole === 'single' ? 'selected' : ''}}"
-      bind:tap="onSelectRole"
-      data-role="single"
+      class="role-card {{selectedRole === 'single_dog' ? 'selected' : ''}}"
+      bindtap="onSelectRole"
+      data-role="single_dog"
     >
       <!-- 装饰性光斑 -->
       <view class="card-blur-circle"></view>
@@ -24,16 +24,16 @@
         <text class="role-subtitle text-sm">寻找志同道合的高校校友</text>
       </view>
       <!-- 选中指示器 -->
-      <view class="selection-indicator" wx:if="{{selectedRole === 'single'}}">
+      <view class="selection-indicator" wx:if="{{selectedRole === 'single_dog'}}">
         <text class="check-icon">✓</text>
       </view>
     </view>
 
     <!-- 我是红娘 -->
     <view
-      class="role-card {{selectedRole === 'matchmaker' ? 'selected' : ''}}"
-      bind:tap="onSelectRole"
-      data-role="matchmaker"
+      class="role-card {{selectedRole === 'introducer' ? 'selected' : ''}}"
+      bindtap="onSelectRole"
+      data-role="introducer"
     >
       <!-- 图标 -->
       <view class="role-icon-circle">
@@ -45,7 +45,7 @@
         <text class="role-subtitle text-sm text-secondary">帮身边的单身校友牵线搭桥</text>
       </view>
       <!-- 选中指示器 -->
-      <view class="selection-indicator" wx:if="{{selectedRole === 'matchmaker'}}">
+      <view class="selection-indicator" wx:if="{{selectedRole === 'introducer'}}">
         <text class="check-icon">✓</text>
       </view>
     </view>

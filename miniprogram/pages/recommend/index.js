@@ -117,8 +117,8 @@ Page({
       birth_year: birthYear,
       age: item.age || (currentYear - birthYear),
       schoolShort,
-      // 映射后端字段名
-      avatar: safe.avatar_url || (safe.photos && safe.photos[0]) || '',
+      // 映射后端字段名（recommend 云函数返回 avatar，getProfile 返回 avatar_url）
+      avatar: safe.avatar || safe.avatar_url || (safe.photos && safe.photos[0]) || '',
       degree: item.degree || '',
       job: safe.job || safe.job_title || '',
       city: item.city || item.hometown || '',

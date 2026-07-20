@@ -348,7 +348,7 @@ function parseIdCard(idCard) {
  * 上传认证材料与实名建档
  */
 async function handleUploadVerification(openid, event) {
-  const { realName, idCard, school, degree, identityUrls, educationUrls, workUrls, verifyType, imageUrls } = event
+  const { realName, idCard, school, degree, identityUrls, educationUrls, workUrls, verifyType, imageUrls, role } = event
 
   // 分支 A：单类型人工复核上传（来自 upload-identity/education/work 页面）
   if (verifyType && imageUrls && imageUrls.length > 0) {
@@ -433,6 +433,7 @@ async function handleUploadVerification(openid, event) {
         zodiac: parsed.zodiac,
         school: school,
         college: '计算机学院', // 预分配演示学院
+        role: role || 'single_dog', // 从 role-select 页传入的角色
         status: 'verified'   // 实名高校双通过
       })
       .eq('user_id', user.id)

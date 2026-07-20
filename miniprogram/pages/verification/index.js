@@ -5,7 +5,10 @@ Page({
   data: {
     // 当前进行到第几步 (1-5)
     step: 1,
-    
+
+    // 从 role-select 页传入的角色
+    role: 'single_dog',
+
     // Step 1: 实名
     realName: '',
     idCard: '',
@@ -36,6 +39,12 @@ Page({
     // 选择下拉菜单配置
     gradeOptions: ['2026', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010'],
     constellationOptions: ["白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"]
+  },
+
+  onLoad(options) {
+    if (options.role) {
+      this.setData({ role: options.role })
+    }
   },
 
   // Step 1 姓名与身份证号输入
@@ -299,6 +308,7 @@ Page({
         const maritalLabel = this.data.maritalStatus === 'single' ? '未婚' : (this.data.maritalStatus === 'divorced' ? '离异' : (this.data.maritalStatus === 'widowed' ? '丧偶' : '暂不披露'))
 
         await api.user.uploadVerification({
+          role: this.data.role,
           realName: this.data.realName,
           idCard: this.data.idCard,
           school: this.data.school,

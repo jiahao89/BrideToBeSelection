@@ -19,7 +19,7 @@
     <view class="user-meta ml-40 flex-1">
       <view class="name-row flex items-center mb-8">
         <text class="user-nickname text-bold" style="font-size: 48rpx;">{{profile.nickname || '校友用户'}}</text>
-        <text class="role-tag ml-8">{{profile.role === 'single' ? '单身校友' : '校友介绍人'}}</text>
+        <text class="role-tag ml-8">{{profile.role === 'single_dog' ? '单身校友' : '校友介绍人'}}</text>
       </view>
       <view class="school-row text-sm text-secondary flex items-center mb-8" wx:if="{{profile.school}}">
         <text>{{profile.school}} · {{profile.degree || '硕士'}}</text>
